@@ -8,15 +8,15 @@
 
 # 截图
 
-<img src="screenshots/Screenshot_2018-09-29-14-37-52.png" width="225" height="400" />
-<img src="screenshots/Screenshot_2018-09-29-14-37-45.png" width="225" height="400" />
-<img src="screenshots/Screenshot_2018-09-29-14-38-43.png" width="225" height="400" />
-<img src="screenshots/Screenshot_2018-09-29-14-38-35.png" width="225" height="400" />
-<img src="screenshots/Screenshot_2018-09-29-14-38-28.png" width="225" height="400" />
-<img src="screenshots/Screenshot_2018-09-29-14-38-16.png" width="225" height="400" />
-<img src="screenshots/Screenshot_2018-09-29-14-38-52.png" width="225" height="400" />
-<img src="screenshots/Screenshot_2018-09-29-14-39-12.png" width="225" height="400" />
-<img src="screenshots/Screenshot_2018-09-29-14-50-07.png" width="225" height="400" />
+<img src="screenshots/Screenshot_2018-09-29-14-37-52.png" width="320" height="600" />
+<img src="screenshots/Screenshot_2018-09-29-14-37-45.png" width="320" height="600" />
+<img src="screenshots/Screenshot_2018-09-29-14-38-43.png" width="320" height="600" />
+<img src="screenshots/Screenshot_2018-09-29-14-38-35.png" width="320" height="600" />
+<img src="screenshots/Screenshot_2018-09-29-14-38-28.png" width="320" height="600" />
+<img src="screenshots/Screenshot_2018-09-29-14-38-16.png" width="320" height="600" />
+<img src="screenshots/Screenshot_2018-09-29-14-38-52.png" width="320" height="600" />
+<img src="screenshots/Screenshot_2018-09-29-14-39-12.png" width="320" height="600" />
+<img src="screenshots/Screenshot_2018-09-29-14-50-07.png" width="320" height="600" />
 
 # 本地依赖  
 
