@@ -1,0 +1,112 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="tech.shmy.ddapp">
+
+    <!-- The INTERNET permission is required for development. Specifically,
+         flutter needs it to communicate with the running application
+         to allow setting breakpoints, to provide hot reload, etc.
+    -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- io.flutter.app.FlutterApplication is an android.app.Application that
+         calls FlutterMain.startInitialization(this); in its onCreate method.
+         In most cases you can leave this as-is, but you if you want to provide
+         additional functionality it is fine to subclass or reimplement
+         FlutterApplication and put your custom class here. -->
+    <application
+        android:name="io.flutter.app.FlutterApplication"
+        android:label="黑人视频"
+        tools:replace="android:label"
+        android:icon="@mipmap/ic_launcher">
+        
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            <!-- This keeps the window background of the activity showing
+                 until Flutter renders its first frame. It can be removed if
+                 there is no splash screen (such as the default splash screen
+                 defined in @style/LaunchTheme). -->
+            <meta-data
+                android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
+                android:value="true" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+
+
+        <!-- 信鸽SDK配置开始 -->
+
+        <!-- 【必须】 信鸽receiver广播接收 -->
+        <receiver android:name="com.tencent.android.tpush.XGPushReceiver"
+                  android:process=":xg_service_v3" >
+            <intent-filter android:priority="0x7fffffff" >
+                <!-- 【必须】 信鸽SDK的内部广播 -->
+                <action android:name="com.tencent.android.tpush.action.SDK" />
+                <action android:name="com.tencent.android.tpush.action.INTERNAL_PUSH_MESSAGE" />
+                <!-- 【必须】 系统广播：开屏和网络切换 -->
+            <action android:name="android.intent.action.USER_PRESENT" />
+            <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            <!-- 【可选】 一些常用的系统广播，增强信鸽service的复活机会，请根据需要选择。当然，你也可以添加APP自定义的一些广播让启动service -->
+            <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+            <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+            <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 【必须】 信鸽service -->
+        <service
+            android:name="com.tencent.android.tpush.service.XGPushServiceV3"
+            android:exported="true"
+            android:persistent="true"
+            android:process=":xg_service_v3" />
+
+
+        <!-- 【必须】 提高service的存活率 -->
+        <service
+            android:name="com.tencent.android.tpush.rpc.XGRemoteService"
+            android:exported="true">
+            <intent-filter>
+        <!-- 【必须】 请修改为当前APP包名 .PUSH_ACTION, 如demo的包名为：com.qq.xgdemo -->
+                    <action android:name="tech.shmy.ddapp.PUSH_ACTION" />
+            </intent-filter>
+        </service>
+
+
+        <!-- 【必须】 【注意】authorities修改为 包名.AUTH_XGPUSH, 如demo的包名为：com.qq.xgdemo-->
+        <provider
+            android:name="com.tencent.android.tpush.XGPushProvider"
+            android:authorities="tech.shmy.ddapp.AUTH_XGPUSH"
+            android:exported="true"/>
+
+        <!-- 【必须】 【注意】authorities修改为 包名.TPUSH_PROVIDER, 如demo的包名为：com.qq.xgdemo-->
+        <provider
+            android:name="com.tencent.android.tpush.SettingsContentProvider"
+            android:authorities="tech.shmy.ddapp.TPUSH_PROVIDER"
+            android:exported="false" />
+
+        <!-- 【必须】 【注意】authorities修改为 包名.TENCENT.MID.V3, 如demo的包名为：com.qq.xgdemo-->
+        <provider
+            android:name="com.tencent.mid.api.MidProvider"
+            android:authorities="tech.shmy.ddapp.TENCENT.MID.V3"
+            android:exported="true" >
+        </provider>
+
+        <!-- 【必须】 请将YOUR_ACCESS_ID修改为APP的AccessId，“21”开头的10位数字，中间没空格 -->
+        <meta-data
+            android:name="XG_V2_ACCESS_ID"
+            android:value="2100306830" />
+        <!-- 【必须】 请将YOUR_ACCESS_KEY修改为APP的AccessKey，“A”开头的12位字符串，中间没空格 -->
+        <meta-data
+            android:name="XG_V2_ACCESS_KEY"
+            android:value="A23R5FC7E8AE" />
+
+    <!-- 信鸽SDK配置结束-->
+    </application>
+</manifest>

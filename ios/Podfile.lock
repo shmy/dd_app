@@ -1,0 +1,134 @@
+PODS:
+  - android_intent (0.0.1):
+    - Flutter
+  - clipboard (0.0.1):
+    - Flutter
+  - connectivity (0.0.1):
+    - Flutter
+    - Reachability
+  - dsBridge (3.0.2)
+  - Flutter (1.0.0)
+  - FMDB (2.7.2):
+    - FMDB/standard (= 2.7.2)
+  - FMDB/standard (2.7.2)
+  - loading (0.0.1):
+    - Flutter
+    - MBProgressHUD
+  - MBProgressHUD (1.1.0)
+  - package_info (0.0.1):
+    - Flutter
+  - path_provider (0.0.1):
+    - Flutter
+  - Reachability (3.2)
+  - share (0.5.2):
+    - Flutter
+  - shared_preferences (0.0.1):
+    - Flutter
+  - sqflite (0.0.1):
+    - Flutter
+    - FMDB (~> 2.7.2)
+  - Toast (4.0.0)
+  - toasty (0.0.1):
+    - Flutter
+    - Toast (~> 4.0.0)
+  - tx_xg (0.0.1):
+    - Flutter
+  - url_launcher (0.0.1):
+    - Flutter
+  - video_player (0.0.1):
+    - Flutter
+    - ZFPlayer/AVPlayer (~> 3.0)
+    - ZFPlayer/ControlView (~> 3.0)
+  - webview (0.0.1):
+    - dsBridge
+    - Flutter
+  - ZFPlayer/AVPlayer (3.1.2):
+    - ZFPlayer/Core
+  - ZFPlayer/ControlView (3.1.2):
+    - ZFPlayer/Core
+  - ZFPlayer/Core (3.1.2)
+
+DEPENDENCIES:
+  - android_intent (from `.symlinks/plugins/android_intent/ios`)
+  - clipboard (from `.symlinks/plugins/clipboard/ios`)
+  - connectivity (from `.symlinks/plugins/connectivity/ios`)
+  - Flutter (from `.symlinks/flutter/ios-release`)
+  - loading (from `.symlinks/plugins/loading/ios`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - share (from `.symlinks/plugins/share/ios`)
+  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - toasty (from `.symlinks/plugins/toasty/ios`)
+  - tx_xg (from `.symlinks/plugins/tx_xg/ios`)
+  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
+  - video_player (from `.symlinks/plugins/video_player/ios`)
+  - webview (from `.symlinks/plugins/webview/ios`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - dsBridge
+    - FMDB
+    - MBProgressHUD
+    - Reachability
+    - Toast
+    - ZFPlayer
+
+EXTERNAL SOURCES:
+  android_intent:
+    :path: ".symlinks/plugins/android_intent/ios"
+  clipboard:
+    :path: ".symlinks/plugins/clipboard/ios"
+  connectivity:
+    :path: ".symlinks/plugins/connectivity/ios"
+  Flutter:
+    :path: ".symlinks/flutter/ios-release"
+  loading:
+    :path: ".symlinks/plugins/loading/ios"
+  package_info:
+    :path: ".symlinks/plugins/package_info/ios"
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
+  share:
+    :path: ".symlinks/plugins/share/ios"
+  shared_preferences:
+    :path: ".symlinks/plugins/shared_preferences/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
+  toasty:
+    :path: ".symlinks/plugins/toasty/ios"
+  tx_xg:
+    :path: ".symlinks/plugins/tx_xg/ios"
+  url_launcher:
+    :path: ".symlinks/plugins/url_launcher/ios"
+  video_player:
+    :path: ".symlinks/plugins/video_player/ios"
+  webview:
+    :path: ".symlinks/plugins/webview/ios"
+
+SPEC CHECKSUMS:
+  android_intent: 96848466ee23479bdb64dc5fa04e8fe1f59200aa
+  clipboard: 6b82e661ca6bfc5f520dc628231a195778f3b96a
+  connectivity: d5992e3758d68b1c4b12d6e012fe0813f1aa1645
+  dsBridge: e1fab0ea5d98908fb86a106029bd4e53d093eb26
+  Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
+  FMDB: 05858873460cee7a6f976ed5881faa7e86de505c
+  loading: 4b7be01928cd3a84b539c9f8ed534a583bcc943e
+  MBProgressHUD: 2e7afcade2b6ac54f29d0640f1dc0267a69a4c7d
+  package_info: d7c98b64f60add4c2908b9d94d82a45d3c8827ad
+  path_provider: 09407919825bfe3c2deae39453b7a5b44f467873
+  Reachability: 3c71d50935b3b3160760ffc6932418fb229c5544
+  share: 222b5dcc8031238af9d7de91149df65bad1aef75
+  shared_preferences: 5a1d487c427ee18fcd3ea1f2a131569481834b53
+  sqflite: d1612813fa7db7c667bed9f1d1b508deffc56999
+  Toast: e16663590cbcdd081fdd8a09b29156ba3b5281df
+  toasty: ffdf0a2321f23701cd7aad845114da4d6bde8cc9
+  tx_xg: ba1082ecd83f946758e701ed93efcdf965e7e153
+  url_launcher: 92b89c1029a0373879933c21642958c874539095
+  video_player: cd1366c8262488cf88fdce5ee81533e61c705c51
+  webview: e1b0e84ad3473a1fbb27c864426decb45aae4875
+  ZFPlayer: db1cda1fe7da38340c3e6b192b974feb0ee19996
+
+PODFILE CHECKSUM: 1e5af4103afd21ca5ead147d7b81d06f494f51a2
+
+COCOAPODS: 1.5.3

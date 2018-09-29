@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="896px" height="1024px" viewBox="0 0 896 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.2 (51160) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-2">
+            <g id="mp4">
+                <path d="M81.6,0 C36.8,0 0,36.8 0,81.6 L0,942.4 C0,987.2 36.8,1024 81.6,1024 L814.4,1024 C859.2,1024 896,987.2 896,942.4 L896,324.8 L593.6,0 L81.6,0 Z" id="Shape" fill="#9B64B2" fill-rule="nonzero"></path>
+                <path d="M896,326.4 L896,342.4 L691.2,342.4 C691.2,342.4 590.4,321.6 592,233.6 C592,233.6 596.8,326.4 689.6,326.4 L896,326.4 Z" id="Shape" fill="#824B9E" fill-rule="nonzero"></path>
+                <path d="M593.6,0 L593.6,233.6 C593.6,259.2 611.2,326.4 691.2,326.4 L896,326.4 L593.6,0 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+                <text id="MP4" font-family="LucidaGrande, Lucida Grande" font-size="280" font-weight="normal" letter-spacing="13.4399996" fill="#FFFFFF">
+                    <tspan x="145" y="871">MP4</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>
