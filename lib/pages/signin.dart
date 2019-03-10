@@ -181,6 +181,7 @@ class _SignInPageState extends State<SignInPage> {
         ),
         keyboardType: TextInputType.text,
         autofocus: true,
+//        obscureText: true,
         onChanged: (String val) {
           this._sendData.username = val;
         },
@@ -202,7 +203,11 @@ class _SignInPageState extends State<SignInPage> {
           fillColor: Colors.grey[200],
           border: InputBorder.none,
         ),
-        obscureText: true,
+        keyboardType: TextInputType.text,
+//        obscureText: true,
+//        cursorColor: Colors.red,
+//        cursorRadius: Radius.circular(16.0),
+//        cursorWidth: 16.0,
         onChanged: (String val) {
           this._sendData.password = val;
         },
@@ -224,7 +229,10 @@ class _SignInPageState extends State<SignInPage> {
           fillColor: Colors.grey[200],
           border: InputBorder.none,
         ),
-        obscureText: true,
+//        obscureText: true,
+//        cursorColor: Colors.red,
+//        cursorRadius: Radius.circular(16.0),
+//        cursorWidth: 16.0,
         onChanged: (String val) {
           this._sendData.re_password = val;
         },

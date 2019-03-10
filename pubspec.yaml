@@ -23,21 +23,21 @@ dependencies:
   # dropdown_menu: ^1.1.0
   event_bus: ^1.0.1
   video_player:
-    path: ../plugins/video_player
-  # video_player_page:
-  #   path: ../plugins/video_player_page
+    path: ../plugins/flutter_video_player
+  flutter_dlan:
+    path: ../plugins/flutter_dlan
   toasty:
-    path: ../plugins/toasty
+    path: ../plugins/flutter_toasty
   clipboard:
-    path: ../plugins/clipboard
+    path: ../plugins/flutter_clipboard
   loading:
-    path: ../plugins/loading
+    path: ../plugins/flutter_loading
   webview:
-    path: ../plugins/webview
+    path: ../plugins/flutter_webview
   android_intent:
     path: ../plugins/android_intent
   tx_xg:
-    path: ../plugins/tx_xg
+    path: ../plugins/flutter_tx_xg
   
 dev_dependencies:
   flutter_test:

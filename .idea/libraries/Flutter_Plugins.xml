@@ -1,0 +1,23 @@
+<component name="libraryTable">
+  <library name="Flutter Plugins">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../plugins/flutter_clipboard" />
+      <root url="file://$PROJECT_DIR$/../plugins/flutter_tx_xg" />
+      <root url="file://$PROJECT_DIR$/../plugins/flutter_webview" />
+      <root url="file://$PROJECT_DIR$/../plugins/flutter_video_player" />
+      <root url="file://$PROJECT_DIR$/../plugins/android_intent" />
+      <root url="file://$PROJECT_DIR$/../plugins/flutter_loading" />
+      <root url="file://$PROJECT_DIR$/../plugins/flutter_toasty" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/share-0.5.3" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-3.0.3" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-1.1.0" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-0.4.1" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/package_info-0.3.2+1" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity-0.3.2" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.4.3" />
+      <root url="file://$PROJECT_DIR$/../plugins/flutter_dlan" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

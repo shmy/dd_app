@@ -107,28 +107,28 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview/ios"
 
 SPEC CHECKSUMS:
-  android_intent: 96848466ee23479bdb64dc5fa04e8fe1f59200aa
-  clipboard: 6b82e661ca6bfc5f520dc628231a195778f3b96a
-  connectivity: d5992e3758d68b1c4b12d6e012fe0813f1aa1645
-  dsBridge: e1fab0ea5d98908fb86a106029bd4e53d093eb26
-  Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
-  FMDB: 05858873460cee7a6f976ed5881faa7e86de505c
-  loading: 4b7be01928cd3a84b539c9f8ed534a583bcc943e
-  MBProgressHUD: 2e7afcade2b6ac54f29d0640f1dc0267a69a4c7d
-  package_info: d7c98b64f60add4c2908b9d94d82a45d3c8827ad
-  path_provider: 09407919825bfe3c2deae39453b7a5b44f467873
-  Reachability: 3c71d50935b3b3160760ffc6932418fb229c5544
-  share: 222b5dcc8031238af9d7de91149df65bad1aef75
-  shared_preferences: 5a1d487c427ee18fcd3ea1f2a131569481834b53
-  sqflite: d1612813fa7db7c667bed9f1d1b508deffc56999
-  Toast: e16663590cbcdd081fdd8a09b29156ba3b5281df
-  toasty: ffdf0a2321f23701cd7aad845114da4d6bde8cc9
-  tx_xg: ba1082ecd83f946758e701ed93efcdf965e7e153
-  url_launcher: 92b89c1029a0373879933c21642958c874539095
-  video_player: cd1366c8262488cf88fdce5ee81533e61c705c51
-  webview: e1b0e84ad3473a1fbb27c864426decb45aae4875
-  ZFPlayer: db1cda1fe7da38340c3e6b192b974feb0ee19996
+  android_intent: 73316069cd1f6aac919df1c6e640cad190fd5e8b
+  clipboard: 392483d2f3c21c6b26f75473b8fedfab31bd5a20
+  connectivity: c72716e202a1225ec4810740d5cb56b8ae3bf4cc
+  dsBridge: e3f0be728d736724a24503a24b7f82b17acdbb23
+  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  FMDB: 6198a90e7b6900cfc046e6bc0ef6ebb7be9236aa
+  loading: f5ee0be3eca657ad64ac9773663a8b93feac81dc
+  MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
+  package_info: 78cabb3c322943c55d39676f4a5bfc748c01d055
+  path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  share: 7d22fe8baedfe93aefd864bf0b73f29711fbb0a3
+  shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
+  sqflite: ff1d9da63c06588cc8d1faf7256d741f16989d5a
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  toasty: c703ecc5612a166873c4cac2438adb6dc266afa5
+  tx_xg: ae5731dd4fbb7e2112f8622b3cfa93cd761712ca
+  url_launcher: 0067ddb8f10d36786672aa0722a21717dba3a298
+  video_player: 365198403be61f603b840f04c17432ab64f74ab0
+  webview: 9e4793779050521e0fb262610f341e89ffeddb88
+  ZFPlayer: 2e1f978b9c0e112d04732c677ec99728c9f80f1b
 
 PODFILE CHECKSUM: 1e5af4103afd21ca5ead147d7b81d06f494f51a2
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.1

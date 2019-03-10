@@ -201,7 +201,7 @@ class FilterBarWidgetState extends State<FilterBarWidget> {
       color: Colors.white,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: List.generate<Widget>(
+        children: List.generate(
           items.length,
           (i) {
             Map v = items[i];

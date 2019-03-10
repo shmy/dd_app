@@ -230,7 +230,7 @@ class _IndexTabPageState extends State<IndexTabPage>
   List<Widget> _buildGrid(List<Map> items) {
     double width = MediaQuery.of(context).size.width;
 
-    return List.generate<Widget>(items.length, (index) {
+    return List.generate(items.length, (index) {
       Map item = items[index]; // TODO 获取index的优化
       item["timestamp"] = DateTime.now().millisecondsSinceEpoch.toString();
       bool isOdd = index % 2 != 0;

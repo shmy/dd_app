@@ -16,7 +16,11 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     compileSdkVersion 27
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/beans.xml'
 
+    }
     lintOptions {
         disable 'InvalidPackage'
     }
@@ -27,12 +31,13 @@ android {
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
-        versionName "0.1.6"
+        versionName "0.1.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [
             XG_ACCESS_ID: "2100306830",
             XG_ACCESS_KEY: "A23R5FC7E8AE",
         ]
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -53,4 +58,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile 'com.android.support:multidex:1.0.1'
 }

@@ -5,6 +5,7 @@ import 'package:dd_app/app.dart';
 import 'package:dd_app/events/event_bus.dart';
 import 'package:dd_app/events/theme.dart';
 import 'package:dd_app/utils/db/setting.dart';
+import 'package:flutter_dlan/flutter_dlan.dart';
 
 // 主题索引
 final int themeIndex = 0;
@@ -48,6 +49,7 @@ class _AppState extends State<App> {
   ThemeConf theme;
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(LifecycleEventHandler());
     // TODO: implement initState
     super.initState();
     // 应用主题
@@ -79,3 +81,24 @@ class _AppState extends State<App> {
     );
   }
 }
+
+class LifecycleEventHandler extends WidgetsBindingObserver {
+
+  LifecycleEventHandler();
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    print('-------' + state.toString() + '-------');
+    switch (state) {
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+      case AppLifecycleState.suspending:
+        await FlutterDlan.stop();
+        break;
+      case AppLifecycleState.resumed:
+        await FlutterDlan.search();
+        break;
+    }
+  }
+}
+

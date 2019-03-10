@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ios/.symlinks/plugins/android_intent" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ios/.symlinks/plugins/clipboard" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ios/.symlinks/plugins/loading" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ios/.symlinks/plugins/toasty" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ios/.symlinks/plugins/tx_xg" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ios/.symlinks/plugins/video_player" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ios/.symlinks/plugins/webview" vcs="Git" />
+  </component>
+</project>

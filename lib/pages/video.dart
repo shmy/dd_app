@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dd_app/pages/dlna.dart';
 import 'package:dd_app/pages/feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shimmer/shimmer.dart';
@@ -748,9 +749,42 @@ class _VideoPageState extends State<VideoPage> {
     }
     return _buildButtons(mItems, items);
   }
+  void _handlePlayItemTap(String name, String tag, String url, String pic, bool inline) {
 
+    double width = MediaQuery.of(context).size.width;
+    ShmyDialog.customDialog(
+      context,
+      child: Container(
+        color: Colors.white,
+        width: width,
+        height: 100.00,
+        child: Column(
+          children: <Widget>[
+            MaterialButton(
+              child: Text("直接播放"),
+              onPressed: () {
+                _handlePlayItemTap2(name, tag, url, pic, inline);
+              },
+            ),
+            MaterialButton(
+              child: Text("投屏播放"),
+              onPressed: () {
+                Navigator.of(context).push(
+                  new CupertinoPageRoute(
+                    builder: (context) => new DlnaPage(url: url),
+                  ),
+                );
+              },
+            )
+          ],
+        ),
+      )
+    );
+
+
+  }
   // 播放按钮点击事件
-  void _handlePlayItemTap(
+  void _handlePlayItemTap2(
       String name, String tag, String url, String pic, bool inline) async {
     // mp4 不支持https
     if (url.startsWith("http://") && !url.endsWith(".mp4")) {

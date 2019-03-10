@@ -210,7 +210,7 @@ class ClassifyPageState extends State<ClassifyPage> implements PageState {
   }
 
   List<Widget> _buildLeftMenu() {
-    return List.generate<Widget>(menus.length, (i) {
+    return List.generate(menus.length, (i) {
       return InkWell(
         onTap: () => _handleLeftMenuTap(i),
         splashColor: Colors.grey[500],
@@ -264,7 +264,7 @@ class ClassifyPageState extends State<ClassifyPage> implements PageState {
     if (subMenus == null) {
       return [];
     }
-    return List.generate<Widget>(subMenus.length, (i) {
+    return List.generate(subMenus.length, (i) {
       Map item = subMenus[i];
       return Stack(
         children: <Widget>[
