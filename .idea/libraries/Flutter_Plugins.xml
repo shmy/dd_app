@@ -4,7 +4,6 @@
       <root url="file://$PROJECT_DIR$/../plugins/flutter_clipboard" />
       <root url="file://$PROJECT_DIR$/../plugins/flutter_tx_xg" />
       <root url="file://$PROJECT_DIR$/../plugins/flutter_webview" />
-      <root url="file://$PROJECT_DIR$/../plugins/flutter_video_player" />
       <root url="file://$PROJECT_DIR$/../plugins/android_intent" />
       <root url="file://$PROJECT_DIR$/../plugins/flutter_loading" />
       <root url="file://$PROJECT_DIR$/../plugins/flutter_toasty" />
@@ -16,6 +15,8 @@
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity-0.3.2" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.4.3" />
       <root url="file://$PROJECT_DIR$/../plugins/flutter_dlan" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/video_player-0.10.0+2" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_statusbar_manager-1.0.2" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

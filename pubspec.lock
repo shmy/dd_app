@@ -132,6 +132,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.7"
+  flutter_statusbar_manager:
+    dependency: "direct main"
+    description:
+      name: flutter_statusbar_manager
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   flutter_swiper:
     dependency: "direct main"
     description:
@@ -355,10 +362,10 @@ packages:
   video_player:
     dependency: "direct main"
     description:
-      path: "../plugins/flutter_video_player"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: video_player
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.10.0+2"
   webview:
     dependency: "direct main"
     description:
@@ -368,4 +375,4 @@ packages:
     version: "0.0.1"
 sdks:
   dart: ">=2.1.0 <3.0.0"
-  flutter: ">=0.1.4 <2.0.0"
+  flutter: ">=0.2.5 <2.0.0"

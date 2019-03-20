@@ -1,14 +1,15 @@
 import 'dart:io';
 import 'package:dd_app/pages/dlna.dart';
 import 'package:dd_app/pages/feedback.dart';
+import 'package:dd_app/widget/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:dd_app/utils/dio.dart';
 import 'package:dd_app/utils/util.dart';
+
 // import 'package:video_player_page/video_player_page.dart';
 // import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:video_player/video_player.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dd_app/widget/photo-hero.dart';
 import 'package:dd_app/utils/db/record.dart';
@@ -18,6 +19,7 @@ import 'package:toasty/toasty.dart';
 import 'package:dd_app/widget/cached-image.dart';
 import 'package:dd_app/widget/ad-item.dart';
 import 'package:dd_app/widget/empty-widget.dart';
+
 // import 'package:dd_app/widget/number.dart';
 import 'package:share/share.dart';
 import 'dart:ui' as ui;
@@ -29,6 +31,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   double get minExtent => _tabBar.preferredSize.height;
+
   @override
   double get maxExtent => _tabBar.preferredSize.height;
 
@@ -51,7 +54,9 @@ class VideoPage extends StatefulWidget {
   final Map item;
   String from;
   final String operatingSystem = Platform.operatingSystem;
+
   VideoPage({Key key, @required this.item, this.from}) : super(key: key);
+
   @override
   _VideoPageState createState() => new _VideoPageState();
 }
@@ -86,88 +91,101 @@ class _VideoPageState extends State<VideoPage> {
   Map item;
   Map last;
   Map<String, List<Map>> pickedPlayItems = {};
+  String playerUrl = "";
+
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double expandedHeight = width * 1.05;
     return Scaffold(
-      body: DefaultTabController(
-        length: tabs.length,
-        child: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              SliverAppBar(
-                // SliverAppBar!
-                elevation: 0.0,
-                expandedHeight: expandedHeight,
-                floating: false,
-                pinned: true,
-                flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: true,
-                  // title:
-                  title: Shimmer.fromColors(
-                    baseColor: Colors.white,
-                    highlightColor: Theme.of(context).primaryColor,
-                    period: Duration(milliseconds: 6000),
-                    child: Text(
-                      item["name"],
-                      style: TextStyle(
-                        fontSize: 16.0,
-                      ),
-                      // textAlign: TextAlign.center,
-                    ),
-                  ),
-                  background: _buildBackgroundCover(),
-                ),
-                actions: <Widget>[
-                  IconButton(
-                    onPressed: fetch,
-                    icon: Icon(
-                      Icons.refresh,
-                      size: 28.0,
-                    ),
-                  )
-                ],
-              ),
-              SliverPersistentHeader(
-                delegate: _SliverAppBarDelegate(
-                  TabBar(
-                    labelColor: Theme.of(context).primaryColor,
-                    labelStyle: TextStyle(
-                      fontSize: 16.0,
-                    ),
-                    unselectedLabelColor: Colors.grey[500],
-                    indicatorColor: Theme.of(context).primaryColor,
-                    indicatorWeight: 3.0,
-                    tabs: tabs.map<Tab>((v) {
-                      return Tab(
-                        child: Row(
-                          children: <Widget>[
-                            v["icon"],
-                            Container(
-                              width: 3.0,
-                            ),
-                            Expanded(
-                              child: Text(
-                                v["name"],
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                pinned: true,
-              )
-            ];
-          },
-          body: _buildTableView(),
-        ),
+      body: Column(
+        children: <Widget>[
+          Video(url: playerUrl),
+          Expanded(
+            child: ListView(
+              children: buildContent(),
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  List<Widget> buildContent() {
+    List<Widget> w = [];
+    if (loadError) {
+      w.add(Center(
+        child: Container(
+          height: 50.0,
+          child: MaterialButton(
+            onPressed: fetch,
+            color: Theme.of(context).primaryColor,
+            child: Text(
+              "加载失败，点击重新加载",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ));
+      return w;
+    }
+    if (isLoading) {
+      w.add(Center(
+        child: CircularProgressIndicator(
+          valueColor:
+              AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+        ),
+      ));
+      return w;
+    }
+    w.add(Center(
+      child: Text(item["name"]),
+    ));
+    pickedPlayItems.forEach((key, val) {
+      String type = val[0]["type"];
+      String name = "外部播放";
+      if (key == "m3u8") {
+        name = "在线播放";
+      } else if (key == "mp4") {
+        name = "在线播放";
+      }
+      // 标题
+      w.add(
+        ListTile(
+          title: Row(
+            children: <Widget>[
+              Image(
+                height: 30.0,
+                width: 30.0,
+                image: AssetImage(
+                  "images/format/" + type + ".webp",
+                ),
+              ),
+              Container(
+                width: 10.0,
+              ),
+              Text(
+                name,
+                style: TextStyle(
+                  fontSize: 17.0,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+      // 横向滚动区域
+      w.add(
+        SingleChildScrollView(
+          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: _buildPlayButton(
+              val.reversed.toList(),
+            ),
+          ),
+        ),
+      );
+    });
+    return w;
   }
 
   @override
@@ -219,263 +237,23 @@ class _VideoPageState extends State<VideoPage> {
     setState(() {
       item = payload;
       pickedPlayItems = _pickItems(payload["remote_url"]);
+      autoPlay();
     });
-    // Map d = {
-    //   "_id": payload["_id"],
-    //   "name": payload["name"],
-    //   "videoList": payload["remote_url"],
-    // };
-    // VideoPlayerPage.jump(videoDetail: d,);
-  }
 
-  // 构建模糊背景图
-  Widget _buildBackgroundCover() {
-    double width = MediaQuery.of(context).size.width / 2 - 2;
-    return Container(
-      child: Stack(
-        children: <Widget>[
-          Positioned(
-            top: 0.0,
-            left: 0.0,
-            bottom: 0.0,
-            right: 0.0,
-            child: CachedImage(
-              item["thumbnail"],
-              fit: BoxFit.fitWidth,
-            ),
-          ),
-          Positioned(
-            child: BackdropFilter(
-              filter: ui.ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-              child: Container(
-                decoration: BoxDecoration(color: Colors.black.withAlpha(60)),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 100.0,
-            left: 0.0,
-            bottom: 0.0,
-            right: 0.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                // 左边图
-                Container(
-                  height: width * 1.35,
-                  margin: EdgeInsets.only(left: 10.0),
-                  width: width,
-                  child: PhotoHero(
-                    item: widget.item,
-                  ),
-                  decoration: BoxDecoration(
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        color: Color(0xcc000000),
-                        offset: Offset(0.0, 2.0),
-                        blurRadius: 4.0,
-                      ),
-                      BoxShadow(
-                        color: Color(0x80000000),
-                        offset: Offset(0.0, 4.0),
-                        blurRadius: 10.0,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 10.0,
-                ), // 留点空隙
-                // 右边描述
-                Expanded(
-                  // height: width * 1.35,
-                  // width: width,
-                  // color: Colors.red,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      item["number"] != null
-                          ? ShmyChip(
-                              text: item["classify"]["name"],
-                            )
-                          : EmptyWidget(),
-                      item["number"] != null
-                          ? WhiteText(
-                              text: '${item["language"]} / ${item["region"]}',
-                            )
-                          : EmptyWidget(),
-                      item["number"] != null
-                          ? WhiteText(
-                              text:
-                                  '${item["released_at"]} / ${item["running_time"] == 0 ? '内详时长' : item["running_time"].toString() + "分钟"}',
-                            )
-                          : EmptyWidget(),
-                      item["number"] != null
-                          ? WhiteText(
-                              text: '${item["latest"]}',
-                              maxLines: 2,
-                            )
-                          : EmptyWidget(),
-                      item["number"] != null
-                          ? WhiteText(
-                              text: '${item["number"]}次浏览',
-                            )
-                          : EmptyWidget(),
-                      // item["number"] != null
-                      //     ? WhiteText(
-                      //         text: '${item["favorited_count"]}人收藏',
-                      //       )
-                      //     : EmptyWidget(),
-                      item["number"] != null
-                          ? Row(
-                              children: <Widget>[
-                                Image(
-                                  height: 20.0,
-                                  width: 20.0,
-                                  image: AssetImage(
-                                    Util.getTypeIcon(item["source"]),
-                                  ),
-                                ),
-                                Container(
-                                  width: 5.0,
-                                ),
-                                Expanded(
-                                  child: WhiteText(
-                                    text:
-                                        '收录于${Util.getTimeago(DateTime.parse(item["generated_at"]))}',
-                                    maxLines: 2,
-                                  ),
-                                ),
-                              ],
-                            )
-                          : EmptyWidget(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
   }
-
-  // 构建tableview
-  Widget _buildTableView() {
-    if (loadError) {
-      return Center(
-        child: Container(
-          height: 50.0,
-          child: MaterialButton(
-            onPressed: fetch,
-            color: Theme.of(context).primaryColor,
-            child: Text(
-              "加载失败，点击重新加载",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-      );
+  void autoPlay() {
+    String url = "";
+    if (pickedPlayItems["m3u8"] != null) {
+      url = pickedPlayItems["m3u8"][0]["url"];
+    } else if (pickedPlayItems["mp4"] != null) {
+      url = pickedPlayItems["mp4"][0]["url"];
     }
-    if (isLoading) {
-      return Center(
-        child: CircularProgressIndicator(
-          valueColor:
-              AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
-        ),
-      );
+    if (url != "") {
+      setState(() {
+        playerUrl = url;
+      });
     }
-
-    return TabBarView(
-      children: <Widget>[
-        ListView(
-          padding: EdgeInsets.zero,
-          children: _buildPlayButtonExpansionTile(),
-        ),
-        ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            Padding(
-              // 片名
-              padding: EdgeInsets.all(10.0),
-              child: item["name"] != null
-                  ? Text(
-                      "视频名称：" + item["name"],
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.0,
-                      ),
-                    )
-                  : null,
-            ),
-            Padding(
-              // 别名
-              padding: EdgeInsets.all(10.0),
-              child: item["alias"] != null
-                  ? Text(
-                      "视频别名：" + item["alias"].join(","),
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.0,
-                      ),
-                    )
-                  : null,
-            ),
-            Padding(
-              // 导演
-              padding: EdgeInsets.all(10.0),
-              child: item["director"] != null
-                  ? Text(
-                      "导演：" + item["director"].join(","),
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.0,
-                      ),
-                    )
-                  : null,
-            ),
-            Padding(
-              // 主演
-              padding: EdgeInsets.all(10.0),
-              child: item["starring"] != null
-                  ? Text(
-                      "主演：" + item["starring"].join(","),
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.0,
-                      ),
-                    )
-                  : null,
-            ),
-            Padding(
-              // 简介
-              padding: EdgeInsets.all(10.0),
-              child: item["introduce"] != null
-                  ? Text(
-                      "视频简介：" +
-                          (item["introduce"] != "" ? item["introduce"] : "暂无"),
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.0,
-                      ),
-                    )
-                  : null,
-            ),
-          ],
-        ),
-        ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            Center(
-              child: Text("功能开发中，敬请期待。"),
-            ),
-          ],
-        ),
-      ],
-    );
   }
-
   // 分组处理
   Map<String, List<Map>> _pickItems(List<dynamic> items) {
     Map<String, List<Map>> tmp = {};
@@ -538,140 +316,6 @@ class _VideoPageState extends State<VideoPage> {
         ),
       ),
     );
-  }
-
-  List<Widget> _buildPlayButtonExpansionTile() {
-    bool favorited = item["favorited"] ?? false;
-    List<Widget> w = [];
-    if (last != null) {
-      w.add(Container(
-        padding: EdgeInsets.only(
-          left: 10.0,
-          right: 10.0,
-        ),
-        // height: 50.0,
-        child: Wrap(
-            // scrollDirection: Axis.horizontal,
-            children: [
-              Center(
-                child: Text(
-                    '记忆您上次看到[${last["tag_name"]}](${Util.parserTime(last["tag_time"])})'),
-              ),
-              Center(
-                child: MaterialButton(
-                  color: Theme.of(context).primaryColor,
-                  onPressed: () {
-                    for (int i = 0, j = item["remote_url"].length; i < j; i++) {
-                      var current = item["remote_url"][i];
-                      if (current["tag"] == last["tag_name"]) {
-                        _handlePlayItemTap(
-                          item["name"],
-                          current["tag"],
-                          current["url"],
-                          item["thumbnail"],
-                          current["inline"],
-                        );
-                        break;
-                      }
-                    }
-                  },
-                  child: Text(
-                    "点我继续播放",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ]),
-      ));
-    }
-    w.add(Container(
-      height: 50.0,
-      margin: EdgeInsets.only(
-        bottom: 0.0,
-        top: 10.0,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          _buildMenu(
-            icon: favorited ? Icons.favorite : Icons.favorite_border,
-            text: item["favorited_count"].toString(),
-            color: favorited ? Theme.of(context).primaryColor : Colors.black,
-            onTap: _handleSelectFavorite,
-          ),
-          _buildMenu(
-            icon: Icons.warning,
-            text: "投诉",
-            color: Colors.blue,
-            onTap: handleComplaints,
-          ),
-          _buildMenu(
-            icon: Icons.error,
-            text: "报错",
-            color: Colors.red,
-            onTap: _handleError,
-          ),
-          _buildMenu(
-            icon: Icons.share,
-            text: "分享",
-            color: Colors.orange,
-            onTap: _handleShare,
-          ),
-        ],
-      ),
-    ));
-    pickedPlayItems.forEach((key, val) {
-      String type = val[0]["type"];
-      String name = "外部播放";
-      if (key == "m3u8") {
-        name = "在线播放";
-      } else if (key == "mp4") {
-        name = "在线播放";
-      }
-      // 标题
-      w.add(
-        ListTile(
-          title: Row(
-            children: <Widget>[
-              Image(
-                height: 30.0,
-                width: 30.0,
-                image: AssetImage(
-                  "images/format/" + type + ".webp",
-                ),
-              ),
-              Container(
-                width: 10.0,
-              ),
-              Text(
-                name,
-                style: TextStyle(
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-      // 横向滚动区域
-      w.add(
-        SingleChildScrollView(
-          padding: EdgeInsets.only(left: 10.0, right: 10.0),
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: _buildPlayButton(
-              val.reversed.toList(),
-            ),
-          ),
-        ),
-      );
-    });
-
-    return w;
   }
 
   // 打开更多剧集
@@ -749,101 +393,20 @@ class _VideoPageState extends State<VideoPage> {
     }
     return _buildButtons(mItems, items);
   }
-  void _handlePlayItemTap(String name, String tag, String url, String pic, bool inline) {
 
-    double width = MediaQuery.of(context).size.width;
-    ShmyDialog.customDialog(
-      context,
-      child: Container(
-        color: Colors.white,
-        width: width,
-        height: 100.00,
-        child: Column(
-          children: <Widget>[
-            MaterialButton(
-              child: Text("直接播放"),
-              onPressed: () {
-                _handlePlayItemTap2(name, tag, url, pic, inline);
-              },
-            ),
-            MaterialButton(
-              child: Text("投屏播放"),
-              onPressed: () {
-                Navigator.of(context).push(
-                  new CupertinoPageRoute(
-                    builder: (context) => new DlnaPage(url: url),
-                  ),
-                );
-              },
-            )
-          ],
-        ),
-      )
-    );
-
-
-  }
-  // 播放按钮点击事件
-  void _handlePlayItemTap2(
-      String name, String tag, String url, String pic, bool inline) async {
-    // mp4 不支持https
+  void _handlePlayItemTap(
+      String name, String tag, String url, String pic, bool inline) {
     if (url.startsWith("http://") && !url.endsWith(".mp4")) {
       url = url.replaceFirst("http://", "https://"); // 公司必须要https
     }
     if (pic.startsWith("http://")) {
       pic = pic.replaceFirst("http://", "https://"); // 公司必须要https
     }
-    int seek = 0;
-    // 添加播放历史
-    await initLast();
-    Record recordModel = await Record.instance;
-    if (last == null) {
-      Map m = await recordModel.upsert(item["_id"], {
-        "_id": item["_id"],
-        "name": item["name"],
-        "pic": item["thumbnail"],
-        "tag_name": tag,
-        "tag_time": 0,
-        "time": DateTime.now().millisecondsSinceEpoch
-      });
-      setState(() {
-        last = m;
-      });
-    } else {
-      print(last);
-      if (last["tag_name"] == tag) {
-        seek = last["tag_time"];
-      }
-    }
-    // print(Platform.isAndroid);
-    // print(Platform.isIOS);
-
-    if (!inline) {
-      if (await canLaunch(url)) {
-        await launch(url);
-      } else {
-        print('Could not launch $url');
-      }
-      return;
-    }
-
-    // 显示广告
-    if (item["ads"] != null && item["ads"][0] != null) {
-      _showAd(item["ads"][0]);
-    }
-    bool isHlS = url.toLowerCase().endsWith(".m3u8");
-    // 点播 hls需要exo2内核 并且硬件解码 mp4 需要ijk内核 软件解码
-    await VideoPlayer.play(
-      name,
-      url,
-      pic,
-      id: item["_id"],
-      tag: tag,
-      seek: seek,
-      append: "【黑人视频】",
-      kernel: isHlS ? 2 : 0,
-    );
+    setState(() {
+      playerUrl = url;
+    });
   }
+
 
   void _handleSelectFavorite() async {
     // 如果正在加载或加载失败不做处理
@@ -976,7 +539,9 @@ class _VideoPageState extends State<VideoPage> {
 
 class ShmyChip extends StatelessWidget {
   final String text;
+
   ShmyChip({@required this.text});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -1008,7 +573,9 @@ class ShmyChip extends StatelessWidget {
 class WhiteText extends StatelessWidget {
   final String text;
   final int maxLines;
+
   WhiteText({@required this.text, this.maxLines: 1});
+
   @override
   Widget build(BuildContext context) {
     return Text(

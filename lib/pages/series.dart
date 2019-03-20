@@ -296,7 +296,7 @@ class _SeriesPageState extends State<SeriesPage> {
   Widget _buildButtons({@required Widget child, String exitText = "取消"}) {
     return Center(
       child: Container(
-        height: 100.0,
+        height: 200.0,
         child: Column(
           children: <Widget>[
             child,

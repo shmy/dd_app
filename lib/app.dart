@@ -71,7 +71,7 @@ class _AppPageState extends State<AppPage> {
     Util.setLocale();
     _handleNetworkChanged();
     _copyZCode();
-    _listenVideoSeekChanged();
+//    _listenVideoSeekChanged();
   }
 
   @override
@@ -79,17 +79,17 @@ class _AppPageState extends State<AppPage> {
     super.dispose();
     subscription.cancel();
   }
-  void _listenVideoSeekChanged() async {
-    Record instance = await Record.instance;
-    VideoPlayer.init((data) async {
-      await instance.updateObjectId(data["id"], {
-        "tag_name": data["tag_name"],
-        "tag_time": data["tag_time"],
-        "time": DateTime.now().millisecondsSinceEpoch,
-      });
-      
-    });
-  }
+//  void _listenVideoSeekChanged() async {
+//    Record instance = await Record.instance;
+//    VideoPlayer.init((data) async {
+//      await instance.updateObjectId(data["id"], {
+//        "tag_name": data["tag_name"],
+//        "tag_time": data["tag_time"],
+//        "time": DateTime.now().millisecondsSinceEpoch,
+//      });
+//
+//    });
+//  }
   // 复制吱口令到剪贴板
   void _copyZCode() async {
     await ClipboardManager.copy(AlipayKEY);

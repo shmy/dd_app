@@ -314,14 +314,14 @@ class ClassifyPageState extends State<ClassifyPage> implements PageState {
   }
 
   void _handleRightMenuTap(Map item) async {
-    if (item["url"] != null) {
-      await VideoPlayer.play(
-        item["name"] + "【黑人视频】",
-        item["url"],
-        "",
-      );
-      return;
-    }
+//    if (item["url"] != null) {
+//      await VideoPlayer.play(
+//        item["name"] + "【黑人视频】",
+//        item["url"],
+//        "",
+//      );
+//      return;
+//    }
     Navigator.of(context).push(
           new CupertinoPageRoute(
             builder: (context) => new ClassifyListPage(

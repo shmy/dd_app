@@ -16,7 +16,7 @@ class Fetch {
   Fetch() {
     Options options = new Options(
         baseUrl: "https://dd.shmy.tech/api/client",
-        // baseUrl: "http://172.27.35.17:1994/api/client",
+//         baseUrl: "http://192.168.1.32:1994/api/client",
         connectTimeout: 10000,
         receiveTimeout: 10000,
         contentType: ContentType.parse("application/x-www-form-urlencoded"),
