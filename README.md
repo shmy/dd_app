@@ -29,7 +29,7 @@
 
 # 本地依赖  
 
-~~ * video_player: [https://github.com/shmy/flutter_video_player](https://github.com/shmy/flutter_video_player) ~~
+~~ video_player: [https://github.com/shmy/flutter_video_player](https://github.com/shmy/flutter_video_player) ~~
 * toasty: [https://github.com/shmy/flutter_toasty](https://github.com/shmy/flutter_toasty)
 * clipboard: [https://github.com/shmy/flutter_clipboard](https://github.com/shmy/flutter_clipboard)
 * loading: [https://github.com/shmy/flutter_loading](https://github.com/shmy/flutter_loading)
