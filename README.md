@@ -4,10 +4,10 @@
 
 # 更新日志
 
-* 2019-03-10 v0.1.8
+### 2019-03-10 v0.1.8
 - 支持dlna协议投屏到其他设备播放
 
-* 之前版本
+### 之前版本
 - 不记得了
 
 # 下载
@@ -29,7 +29,7 @@
 
 # 本地依赖  
 
-* ~~ video_player: [https://github.com/shmy/flutter_video_player](https://github.com/shmy/flutter_video_player) ~~
+~~ * video_player: [https://github.com/shmy/flutter_video_player](https://github.com/shmy/flutter_video_player) ~~
 * toasty: [https://github.com/shmy/flutter_toasty](https://github.com/shmy/flutter_toasty)
 * clipboard: [https://github.com/shmy/flutter_clipboard](https://github.com/shmy/flutter_clipboard)
 * loading: [https://github.com/shmy/flutter_loading](https://github.com/shmy/flutter_loading)
