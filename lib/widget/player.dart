@@ -19,15 +19,11 @@ class _Video extends State<Video> {
   int quarterTurns = 0;
   bool isFullScreenMode = false;
   bool hiddenControls = true;
-  bool isPlaying = false;
-  double total = 1.0;
-  double loaded = 0.0;
+  bool isLocked = false;
+  VideoPlayerValue _lastValue;
   Function dialogSetState;
-  double videoWidth = 3.0;
-  double videoHeight = 2.0;
   VideoPlayerController videoPlayerController;
-  double panStartX = 0.0;
-  double panStartY = 0.0;
+
   Timer timer;
 
   Widget build(BuildContext context) {
@@ -36,12 +32,14 @@ class _Video extends State<Video> {
     }
     return Container();
   }
+
   get setStateFn {
     if (isFullScreenMode) {
       return dialogSetState;
     }
     return setState;
   }
+
   @override
   void initState() {
     super.initState();
@@ -79,77 +77,113 @@ class _Video extends State<Video> {
     videoPlayerController = VideoPlayerController.network(widget.url)
       ..addListener(videoListener)
       ..setVolume(1.0)
-      ..initialize()
-      ..play();
+      ..initialize().then((_) {
+        videoListener();
+        videoPlayerController.play();
+      });
+
     switchControls();
   }
 
   Widget buildVideo() {
-    return RotatedBox(
-      quarterTurns: quarterTurns,
-      child: Container(
-        color: Colors.black,
-        child: AspectRatio(
-          aspectRatio: 3 / 2,
-          child: Stack(
-            children: <Widget>[
-              Positioned(
+    return WillPopScope(
+      child: RotatedBox(
+        quarterTurns: quarterTurns,
+        child: Container(
+          color: Colors.black,
+          child: AspectRatio(
+            aspectRatio: 3 / 2,
+            child: Stack(
+              children: <Widget>[
+                // 播放区域
+                Positioned(
+                    top: 0.0,
+                    left: 0.0,
+                    right: 0.0,
+                    bottom: 0.0,
+                    child: Center(
+                      child: AspectRatio(
+                        aspectRatio:
+                            _lastValue != null ? _lastValue.aspectRatio : 3 / 2,
+                        child: videoPlayerController == null
+                            ? Container(
+                                color: Colors.black,
+                              )
+                            : VideoPlayer(videoPlayerController),
+                      ),
+                    )),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: (_lastValue != null ? _lastValue.isBuffering : true)
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : emptyWidget(),
+                ),
+                // 手势区域
+                Positioned(
                   top: 0.0,
                   left: 0.0,
                   right: 0.0,
                   bottom: 0.0,
-                  child: Center(
-                    child: AspectRatio(
-                      aspectRatio: videoWidth / videoHeight,
-                      child: videoPlayerController == null
-                          ? Container(
-                        color: Colors.black,
-                      )
-                          : VideoPlayer(videoPlayerController),
-                    ),
-                  )
-              ),
-              Positioned(
-                top: 0.0,
-                left: 0.0,
-                right: 0.0,
-                bottom: 0.0,
-                child: GestureDetector(
-                  onTap: () {
-                    switchControls();
-                  },
-                  onDoubleTap: () {
-                    // 双加切换播放/暂停
-                    switchPlayState();
-                  },
-                  // 垂直
-                  onVerticalDragDown: (DragDownDetails details) {
-//                    panStartX = details.globalPosition.dx;
-                    panStartY = details.globalPosition.dy;
-                  },
-                  // 水平
-                  onHorizontalDragDown: (DragDownDetails details) {
-                    panStartX = details.globalPosition.dx;
+                  child: GestureDetector(
+                    onTap: () {
+                      switchControls();
+                    },
+                    onDoubleTap: () {
+                      // 双加切换播放/暂停
+                      switchPlayState();
+                    },
+                    // 垂直
+//                  onVerticalDragDown: (DragDownDetails details) {
 //                    panStartY = details.globalPosition.dy;
-                  },
+//                  },
+//                  // 水平
+//                  onHorizontalDragDown: (DragDownDetails details) {
+//                    panStartX = details.globalPosition.dx;
+//                  },
 //                  onHorizontalDragUpdate: (DragUpdateDetails details) {
 //                    print('-------onHorizontalDragUpdate------');
 //                    print(details);
 //                  },
-                  onVerticalDragUpdate: (DragUpdateDetails details) {
-                    print('-------onVerticalDragUpdate------');
-                    double volume = details.globalPosition.dy - panStartY;
-                    volume += videoPlayerController.value.volume;
-                    print(volume);
-                    videoPlayerController.setVolume(volume);
-                  },
-                  onHorizontalDragUpdate: (DragUpdateDetails details) {
-//                    print('-------onVerticalDragUpdate------');
-//                    print(details);
-                  },
+//                  onVerticalDragUpdate: (DragUpdateDetails details) {
+//                  },
+                  ),
                 ),
-              ),
-              // 上部控制条
+
+                // 锁定按钮
+                hiddenControls || !isFullScreenMode
+                    ? emptyWidget()
+                    : Positioned(
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        child: Container(
+                          width: 40.0,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              IconButton(
+                                icon: Icon(
+                                  isLocked ? Icons.lock_open : Icons.lock,
+                                  size: 24,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  setStateFn(() {
+                                    isLocked = !isLocked;
+                                  });
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                // 上部控制条
 //              hiddenControls
 //                  ? emptyWidget()
 //                  : Positioned(
@@ -161,70 +195,96 @@ class _Video extends State<Video> {
 //                  color: Colors.white54,
 //                ),
 //              ),
-              // 下部控制条
-              hiddenControls
-                  ? emptyWidget()
-                  : Positioned(
-                bottom: 0.0,
-                left: 0.0,
-                right: 0.0,
-                child: Container(
-                  height: 30.0,
-                  color: Colors.white24,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          isPlaying ? Icons.pause : Icons.play_arrow,
-                          size: 24,
-                          color: Colors.white,
+                // 下部控制条
+                hiddenControls || isLocked
+                    ? emptyWidget()
+                    : Positioned(
+                        bottom: 0.0,
+                        left: 0.0,
+                        right: 0.0,
+                        child: Container(
+//                          height: 30.0,
+                          color: Colors.white24,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              buildControlIconButton(
+                                  _lastValue != null && _lastValue.isPlaying
+                                      ? Icons.pause
+                                      : Icons.play_arrow,
+                                  switchPlayState),
+                              Expanded(
+                                  child: Row(
+                                children: <Widget>[
+                                  // 进度条
+                                  Expanded(
+                                    child: Container(
+//                                      color: Colors.red,
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Slider(
+                                        value: _lastValue != null ? _lastValue.position.inSeconds.toDouble() : 0,
+                                        max: _lastValue != null ? _lastValue.duration.inSeconds.toDouble() : 1,
+                                        onChanged: (d) {
+                                          seekTo(d);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  buildSliderLabel(formatTime(_lastValue != null ? _lastValue.position.inSeconds.toDouble() : 0)),
+                                  buildSliderLabel("/"),
+                                  buildSliderLabel(formatTime(_lastValue != null ? _lastValue.duration.inSeconds.toDouble() : 1)),
+                                ],
+                              )),
+                              isFullScreenMode
+                                  ? buildControlIconButton(
+                                      Icons.rotate_left, rotateScreen)
+                                  : emptyWidget(),
+                              isFullScreenMode
+                                  ? buildControlIconButton(
+                                      Icons.tv, enterDlna, 20)
+                                  : emptyWidget(),
+                              buildControlIconButton(
+                                  isFullScreenMode
+                                      ? Icons.fullscreen_exit
+                                      : Icons.fullscreen,
+                                  switchFullMode)
+                            ],
+                          ),
                         ),
-                        onPressed: () => switchPlayState(),
                       ),
-                      Expanded(
-                        child: Slider(
-                            value: loaded,
-                            max: total,
-                            onChanged: (d) {
-                              seekTo(d);
-                            }),
-                      ),
-                      isFullScreenMode ? IconButton(
-                        icon: Icon(
-                          Icons.rotate_left,
-                          size: 24,
-                          color: Colors.white,
-                        ),
-                        onPressed: () => rotateScreen(),
-                      ) : emptyWidget(),
-                      IconButton(
-                        icon: Icon( Icons.tv,
-                          size: 20,
-                          color: Colors.white,
-                        ),
-                        onPressed: () => enterDlna(),
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          isFullScreenMode
-                              ? Icons.fullscreen_exit
-                              : Icons.fullscreen,
-                          size: 24,
-                          color: Colors.white,
-                        ),
-                        onPressed: () => switchFullMode(),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      )
+      ),
+      onWillPop: () async {
+        if (!isFullScreenMode) {
+          return true;
+        }
+        return !isLocked;
+      },
+    );
+  }
 
+  Widget buildSliderLabel(String label) {
+    return Text(label,
+        style: TextStyle(
+            color: Colors.white, fontSize: 10.0, fontWeight: FontWeight.bold));
+  }
+
+  Widget buildControlIconButton(IconData icon, Function onTap,
+      [double size = 24]) {
+    return GestureDetector(
+      child: Padding(
+        padding: EdgeInsets.only(left: 5.0, right: 5.0),
+        child: Icon(
+          icon,
+          size: size,
+          color: Colors.white,
+        ),
+      ),
+      onTap: () => onTap(),
     );
   }
 
@@ -234,11 +294,13 @@ class _Video extends State<Video> {
       width: 0.0,
     );
   }
+
   void rotateScreen() {
     setStateFn(() {
       quarterTurns = quarterTurns - 1;
     });
   }
+
   void enterDlna() async {
     if (videoPlayerController != null) {
       videoPlayerController.pause();
@@ -250,6 +312,7 @@ class _Video extends State<Video> {
     );
     videoPlayerController.play();
   }
+
   void enterFullScreen() async {
     setStateFn(() {
       quarterTurns = 1;
@@ -297,13 +360,14 @@ class _Video extends State<Video> {
       enterFullScreen();
     }
   }
+
   void switchControls() {
     if (timer != null) {
       timer.cancel();
       timer = null;
     }
     if (!hiddenControls == false) {
-      timer = Timer(Duration(milliseconds: 3000), () {
+      timer = Timer(Duration(milliseconds: 5000), () {
         setStateFn(() {
           hiddenControls = true;
         });
@@ -313,11 +377,12 @@ class _Video extends State<Video> {
       hiddenControls = !hiddenControls;
     });
   }
+
   void switchPlayState() {
-    if (videoPlayerController == null) {
+    if (videoPlayerController == null || isLocked) {
       return;
     }
-    if (isPlaying) {
+    if (_lastValue != null && _lastValue.isPlaying) {
       videoPlayerController.pause();
     } else {
       videoPlayerController.play();
@@ -337,18 +402,31 @@ class _Video extends State<Video> {
     }
     setStateFn(() {
       if (videoPlayerController != null) {
-        if (videoPlayerController.value.size != null) {
-          videoHeight = videoPlayerController.value.size.height;
-          videoWidth = videoPlayerController.value.size.width;
-        }
-        isPlaying = videoPlayerController.value.isPlaying;
-        if (videoPlayerController.value.duration != null) {
-          total = videoPlayerController.value.duration.inSeconds.toDouble();
-        }
-        if (videoPlayerController.value.position != null) {
-          loaded = videoPlayerController.value.position.inSeconds.toDouble();
-        }
+        _lastValue = videoPlayerController.value;
       }
     });
+  }
+
+  String formatTime(double sec) {
+    Duration d = Duration(seconds: sec.toInt());
+    final ms = d.inMilliseconds;
+    int seconds = ms ~/ 1000;
+    final int hours = seconds ~/ 3600;
+    seconds = seconds % 3600;
+    var minutes = seconds ~/ 60;
+    seconds = seconds % 60;
+
+    final hoursString = hours >= 10 ? '$hours' : hours == 0 ? '00' : '0$hours';
+
+    final minutesString =
+        minutes >= 10 ? '$minutes' : minutes == 0 ? '00' : '0$minutes';
+
+    final secondsString =
+        seconds >= 10 ? '$seconds' : seconds == 0 ? '00' : '0$seconds';
+
+    final formattedTime =
+        '${hoursString == '00' ? '' : hoursString + ':'}$minutesString:$secondsString';
+
+    return formattedTime;
   }
 }
