@@ -132,13 +132,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.7"
-  flutter_statusbar_manager:
-    dependency: "direct main"
-    description:
-      name: flutter_statusbar_manager
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.2"
   flutter_swiper:
     dependency: "direct main"
     description:

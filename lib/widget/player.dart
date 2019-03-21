@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:dd_app/pages/dlna.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
-import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 
 class Video extends StatefulWidget {
   String url;
@@ -20,24 +20,26 @@ class _Video extends State<Video> {
   bool isFullScreenMode = false;
   bool hiddenControls = true;
   bool isLocked = false;
-  VideoPlayerValue _lastValue;
-  Function dialogSetState;
+  bool isPlaying = false;
+  bool isBuffering = false;
+  DeviceOrientation defaultFullScreenOrientation = DeviceOrientation.landscapeLeft;
+  double aspectRatio = 3 / 2;
+  double duration = 0.0;
+  double position = 0.0;
   VideoPlayerController videoPlayerController;
 
   Timer timer;
 
   Widget build(BuildContext context) {
-    if (quarterTurns == 0 && !isFullScreenMode) {
-      return buildVideo();
-    }
-    return Container();
+    return buildVideo();
   }
 
-  get setStateFn {
-    if (isFullScreenMode) {
-      return dialogSetState;
-    }
-    return setState;
+  String get formatPosition {
+    return formatTime(position);
+  }
+
+  String get formatDuration {
+    return formatTime(duration);
   }
 
   @override
@@ -87,57 +89,56 @@ class _Video extends State<Video> {
 
   Widget buildVideo() {
     return WillPopScope(
-      child: RotatedBox(
-        quarterTurns: quarterTurns,
-        child: Container(
-          color: Colors.black,
-          child: AspectRatio(
-            aspectRatio: 3 / 2,
-            child: Stack(
-              children: <Widget>[
-                // 播放区域
-                Positioned(
-                    top: 0.0,
-                    left: 0.0,
-                    right: 0.0,
-                    bottom: 0.0,
-                    child: Center(
-                      child: AspectRatio(
-                        aspectRatio:
-                            _lastValue != null ? _lastValue.aspectRatio : 3 / 2,
-                        child: videoPlayerController == null
-                            ? Container(
-                                color: Colors.black,
-                              )
-                            : VideoPlayer(videoPlayerController),
-                      ),
-                    )),
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: (_lastValue != null ? _lastValue.isBuffering : true)
-                      ? Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : emptyWidget(),
-                ),
-                // 手势区域
-                Positioned(
-                  top: 0.0,
-                  left: 0.0,
-                  right: 0.0,
-                  bottom: 0.0,
-                  child: GestureDetector(
-                    onTap: () {
-                      switchControls();
-                    },
-                    onDoubleTap: () {
-                      // 双加切换播放/暂停
-                      switchPlayState();
-                    },
-                    // 垂直
+      child: Container(
+        color: Colors.black,
+        height: isFullScreenMode
+            ? MediaQuery.of(context).size.height
+            : MediaQuery.of(context).size.height / 3,
+        width: MediaQuery.of(context).size.width,
+        child: Stack(
+          children: <Widget>[
+            // 播放区域
+            Positioned(
+                top: 0.0,
+                left: 0.0,
+                right: 0.0,
+                bottom: 0.0,
+                child: Center(
+                  child: AspectRatio(
+                    aspectRatio: aspectRatio,
+                    child: videoPlayerController == null
+                        ? Container(
+                            color: Colors.black,
+                          )
+                        : VideoPlayer(videoPlayerController),
+                  ),
+                )),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: (isBuffering)
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : emptyWidget(),
+            ),
+            // 手势区域
+            Positioned(
+              top: 0.0,
+              left: 0.0,
+              right: 0.0,
+              bottom: 0.0,
+              child: GestureDetector(
+                onTap: () {
+                  switchControls();
+                },
+                onDoubleTap: () {
+                  // 双加切换播放/暂停
+                  switchPlayState();
+                },
+                // 垂直
 //                  onVerticalDragDown: (DragDownDetails details) {
 //                    panStartY = details.globalPosition.dy;
 //                  },
@@ -151,39 +152,38 @@ class _Video extends State<Video> {
 //                  },
 //                  onVerticalDragUpdate: (DragUpdateDetails details) {
 //                  },
-                  ),
-                ),
-
-                // 锁定按钮
-                hiddenControls || !isFullScreenMode
-                    ? emptyWidget()
-                    : Positioned(
-                        top: 0,
-                        left: 0,
-                        bottom: 0,
-                        child: Container(
-                          width: 40.0,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              IconButton(
-                                icon: Icon(
-                                  isLocked ? Icons.lock_open : Icons.lock,
-                                  size: 24,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () {
-                                  setStateFn(() {
-                                    isLocked = !isLocked;
-                                  });
-                                },
-                              )
-                            ],
-                          ),
-                        ),
+              ),
+            ),
+            // 锁定按钮
+            hiddenControls || !isFullScreenMode
+                ? emptyWidget()
+                : Positioned(
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    child: Container(
+                      width: 40.0,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(
+                              isLocked ? Icons.lock_open : Icons.lock,
+                              size: 24,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                isLocked = !isLocked;
+                              });
+                            },
+                          )
+                        ],
                       ),
-                // 上部控制条
+                    ),
+                  ),
+            // 上部控制条
 //              hiddenControls
 //                  ? emptyWidget()
 //                  : Positioned(
@@ -195,72 +195,71 @@ class _Video extends State<Video> {
 //                  color: Colors.white54,
 //                ),
 //              ),
-                // 下部控制条
-                hiddenControls || isLocked
-                    ? emptyWidget()
-                    : Positioned(
-                        bottom: 0.0,
-                        left: 0.0,
-                        right: 0.0,
-                        child: Container(
+            // 下部控制条
+            hiddenControls || isLocked
+                ? emptyWidget()
+                : Positioned(
+                    bottom: 0.0,
+                    left: 0.0,
+                    right: 0.0,
+                    child: Container(
 //                          height: 30.0,
-                          color: Colors.white24,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                      color: Colors.white24,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          buildControlIconButton(
+                              isPlaying ? Icons.pause : Icons.play_arrow,
+                              switchPlayState),
+                          Expanded(
+                              child: Row(
                             children: <Widget>[
-                              buildControlIconButton(
-                                  _lastValue != null && _lastValue.isPlaying
-                                      ? Icons.pause
-                                      : Icons.play_arrow,
-                                  switchPlayState),
+                              // 进度条
                               Expanded(
-                                  child: Row(
-                                children: <Widget>[
-                                  // 进度条
-                                  Expanded(
-                                    child: Container(
+                                child: Container(
 //                                      color: Colors.red,
-                                      padding: EdgeInsets.all(0.0),
-                                      child: Slider(
-                                        value: _lastValue != null ? _lastValue.position.inSeconds.toDouble() : 0,
-                                        max: _lastValue != null ? _lastValue.duration.inSeconds.toDouble() : 1,
-                                        onChanged: (d) {
-                                          seekTo(d);
-                                        },
-                                      ),
-                                    ),
+                                  padding: EdgeInsets.all(0.0),
+                                  child: Slider(
+                                    value: position,
+                                    max: duration,
+                                    onChanged: (d) {
+                                      seekTo(d);
+                                    },
                                   ),
-                                  buildSliderLabel(formatTime(_lastValue != null ? _lastValue.position.inSeconds.toDouble() : 0)),
-                                  buildSliderLabel("/"),
-                                  buildSliderLabel(formatTime(_lastValue != null ? _lastValue.duration.inSeconds.toDouble() : 1)),
-                                ],
-                              )),
-                              isFullScreenMode
-                                  ? buildControlIconButton(
-                                      Icons.rotate_left, rotateScreen)
-                                  : emptyWidget(),
-                              isFullScreenMode
-                                  ? buildControlIconButton(
-                                      Icons.tv, enterDlna, 20)
-                                  : emptyWidget(),
-                              buildControlIconButton(
-                                  isFullScreenMode
-                                      ? Icons.fullscreen_exit
-                                      : Icons.fullscreen,
-                                  switchFullMode)
+                                ),
+                              ),
+                              buildSliderLabel(formatPosition),
+                              buildSliderLabel("/"),
+                              buildSliderLabel(formatDuration),
                             ],
-                          ),
-                        ),
+                          )),
+                          isFullScreenMode
+                              ? buildControlIconButton(
+                                  Icons.rotate_left, rotateScreen)
+                              : emptyWidget(),
+                          isFullScreenMode
+                              ? buildControlIconButton(Icons.tv, enterDlna, 20)
+                              : emptyWidget(),
+                          buildControlIconButton(
+                              isFullScreenMode
+                                  ? Icons.fullscreen_exit
+                                  : Icons.fullscreen,
+                              switchFullMode)
+                        ],
                       ),
-              ],
-            ),
-          ),
+                    ),
+                  ),
+          ],
         ),
       ),
       onWillPop: () async {
         if (!isFullScreenMode) {
           return true;
+        }
+        if (!isLocked) {
+          exitFullScreen();
+          return false;
         }
         return !isLocked;
       },
@@ -296,9 +295,9 @@ class _Video extends State<Video> {
   }
 
   void rotateScreen() {
-    setStateFn(() {
-      quarterTurns = quarterTurns - 1;
-    });
+    startTimer();
+    defaultFullScreenOrientation = defaultFullScreenOrientation == DeviceOrientation.landscapeLeft ? DeviceOrientation.landscapeRight : DeviceOrientation.landscapeLeft;
+    SystemChrome.setPreferredOrientations([defaultFullScreenOrientation]);
   }
 
   void enterDlna() async {
@@ -314,46 +313,26 @@ class _Video extends State<Video> {
   }
 
   void enterFullScreen() async {
-    setStateFn(() {
-      quarterTurns = 1;
+    setState(() {
       isFullScreenMode = true;
     });
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    FlutterStatusbarManager.setFullscreen(true);
-    await showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return StatefulBuilder(builder: (context, _setState) {
-            dialogSetState = _setState;
-            return Scaffold(
-              backgroundColor: Colors.black,
-              body: Container(
-                height: height,
-                width: width,
-                child: buildVideo(),
-              ),
-            );
-          });
-        });
-
-    setStateFn(() {
-      quarterTurns = 0;
-      isFullScreenMode = false;
-    });
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    // 设置横屏
+    SystemChrome.setPreferredOrientations([defaultFullScreenOrientation]);
   }
 
   void exitFullScreen() {
-    Navigator.of(context).pop();
-    FlutterStatusbarManager.setFullscreen(false);
-    setStateFn(() {
-      quarterTurns = 0;
+    // 退出全屏
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom, SystemUiOverlay.top]);
+    // 返回竖屏
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    setState(() {
       isFullScreenMode = false;
     });
   }
 
   void switchFullMode() {
+    startTimer();
     if (isFullScreenMode) {
       exitFullScreen();
     } else {
@@ -361,19 +340,23 @@ class _Video extends State<Video> {
     }
   }
 
-  void switchControls() {
+  void startTimer() {
     if (timer != null) {
       timer.cancel();
       timer = null;
     }
-    if (!hiddenControls == false) {
-      timer = Timer(Duration(milliseconds: 5000), () {
-        setStateFn(() {
-          hiddenControls = true;
-        });
+    timer = Timer(Duration(milliseconds: 5000), () {
+      setState(() {
+        hiddenControls = true;
       });
+    });
+  }
+
+  void switchControls() {
+    if (!hiddenControls == false) {
+      startTimer();
     }
-    setStateFn(() {
+    setState(() {
       hiddenControls = !hiddenControls;
     });
   }
@@ -382,7 +365,8 @@ class _Video extends State<Video> {
     if (videoPlayerController == null || isLocked) {
       return;
     }
-    if (_lastValue != null && _lastValue.isPlaying) {
+    startTimer();
+    if (isPlaying) {
       videoPlayerController.pause();
     } else {
       videoPlayerController.play();
@@ -391,6 +375,7 @@ class _Video extends State<Video> {
 
   void seekTo(double seconds) {
     if (videoPlayerController != null) {
+      startTimer();
       videoPlayerController.seekTo(Duration(seconds: seconds.toInt()));
       videoPlayerController.play();
     }
@@ -400,9 +385,13 @@ class _Video extends State<Video> {
     if (!mounted) {
       return;
     }
-    setStateFn(() {
+    setState(() {
       if (videoPlayerController != null) {
-        _lastValue = videoPlayerController.value;
+        duration = videoPlayerController.value.duration.inSeconds.toDouble();
+        position = videoPlayerController.value.position.inSeconds.toDouble();
+        isPlaying = videoPlayerController.value.isPlaying;
+        aspectRatio = videoPlayerController.value.aspectRatio;
+        isBuffering = videoPlayerController.value.isBuffering;
       }
     });
   }
