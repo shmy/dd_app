@@ -8,6 +8,8 @@ PODS:
     - Reachability
   - dsBridge (3.0.2)
   - Flutter (1.0.0)
+  - flutter_dlan (0.0.1):
+    - Flutter
   - FMDB (2.7.2):
     - FMDB/standard (= 2.7.2)
   - FMDB/standard (2.7.2)
@@ -37,22 +39,16 @@ PODS:
     - Flutter
   - video_player (0.0.1):
     - Flutter
-    - ZFPlayer/AVPlayer (~> 3.0)
-    - ZFPlayer/ControlView (~> 3.0)
   - webview (0.0.1):
     - dsBridge
     - Flutter
-  - ZFPlayer/AVPlayer (3.1.2):
-    - ZFPlayer/Core
-  - ZFPlayer/ControlView (3.1.2):
-    - ZFPlayer/Core
-  - ZFPlayer/Core (3.1.2)
 
 DEPENDENCIES:
   - android_intent (from `.symlinks/plugins/android_intent/ios`)
   - clipboard (from `.symlinks/plugins/clipboard/ios`)
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - Flutter (from `.symlinks/flutter/ios-release`)
+  - flutter_dlan (from `.symlinks/plugins/flutter_dlan/ios`)
   - loading (from `.symlinks/plugins/loading/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -72,7 +68,6 @@ SPEC REPOS:
     - MBProgressHUD
     - Reachability
     - Toast
-    - ZFPlayer
 
 EXTERNAL SOURCES:
   android_intent:
@@ -83,6 +78,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/connectivity/ios"
   Flutter:
     :path: ".symlinks/flutter/ios-release"
+  flutter_dlan:
+    :path: ".symlinks/plugins/flutter_dlan/ios"
   loading:
     :path: ".symlinks/plugins/loading/ios"
   package_info:
@@ -112,6 +109,7 @@ SPEC CHECKSUMS:
   connectivity: c72716e202a1225ec4810740d5cb56b8ae3bf4cc
   dsBridge: e3f0be728d736724a24503a24b7f82b17acdbb23
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  flutter_dlan: 5dd3444a02e87a565e83ccbdf45e8c1e1aeb65ee
   FMDB: 6198a90e7b6900cfc046e6bc0ef6ebb7be9236aa
   loading: f5ee0be3eca657ad64ac9773663a8b93feac81dc
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
@@ -125,9 +123,8 @@ SPEC CHECKSUMS:
   toasty: c703ecc5612a166873c4cac2438adb6dc266afa5
   tx_xg: ae5731dd4fbb7e2112f8622b3cfa93cd761712ca
   url_launcher: 0067ddb8f10d36786672aa0722a21717dba3a298
-  video_player: 365198403be61f603b840f04c17432ab64f74ab0
+  video_player: 3964090a33353060ed7f58aa6427c7b4b208ec21
   webview: 9e4793779050521e0fb262610f341e89ffeddb88
-  ZFPlayer: 2e1f978b9c0e112d04732c677ec99728c9f80f1b
 
 PODFILE CHECKSUM: 1e5af4103afd21ca5ead147d7b81d06f494f51a2
 

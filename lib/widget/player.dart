@@ -22,7 +22,8 @@ class _Video extends State<Video> {
   bool isLocked = false;
   bool isPlaying = false;
   bool isBuffering = false;
-  DeviceOrientation defaultFullScreenOrientation = DeviceOrientation.landscapeLeft;
+  DeviceOrientation defaultFullScreenOrientation =
+      DeviceOrientation.landscapeLeft;
   double aspectRatio = 3 / 2;
   double duration = 0.0;
   double position = 0.0;
@@ -169,7 +170,7 @@ class _Video extends State<Video> {
                         children: <Widget>[
                           IconButton(
                             icon: Icon(
-                              isLocked ? Icons.lock_open : Icons.lock,
+                              isLocked ? Icons.lock : Icons.lock_open,
                               size: 24,
                               color: Colors.white,
                             ),
@@ -184,17 +185,37 @@ class _Video extends State<Video> {
                     ),
                   ),
             // 上部控制条
-//              hiddenControls
-//                  ? emptyWidget()
-//                  : Positioned(
-//                top: 0.0,
-//                left: 0.0,
-//                right: 0.0,
-//                child: Container(
-//                  height: 30.0,
-//                  color: Colors.white54,
-//                ),
-//              ),
+            hiddenControls || isLocked
+                ? emptyWidget()
+                : Positioned(
+                    top: isFullScreenMode ? 0.0 : 30.0,
+                    left: 0.0,
+                    right: 0.0,
+                    child: Container(
+                      height: 45.0,
+                      color: Colors.transparent,
+                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          buildControlIconButton(Icons.arrow_back, backTouched),
+                          Row(
+                            children: <Widget>[
+                              isFullScreenMode
+                                  ? buildControlIconButton(
+                                      Icons.rotate_left, rotateScreen)
+                                  : emptyWidget(),
+                              isFullScreenMode
+                                  ? buildControlIconButton(
+                                      Icons.tv, enterDlna, 20)
+                                  : emptyWidget(),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
             // 下部控制条
             hiddenControls || isLocked
                 ? emptyWidget()
@@ -203,8 +224,22 @@ class _Video extends State<Video> {
                     left: 0.0,
                     right: 0.0,
                     child: Container(
-//                          height: 30.0,
-                      color: Colors.white24,
+                      height: 30.0,
+                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+//                      color: Color.fromRGBO(244, 244, 244, 0.7),
+                      decoration: BoxDecoration(
+//                        boxShadow: [
+//                          BoxShadow(
+//                              color: Colors.yellow, blurRadius: 10.0, spreadRadius: 10.0),
+//                        ],
+                        gradient: new LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.white10,
+                              Colors.grey,
+                            ]),
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -234,13 +269,6 @@ class _Video extends State<Video> {
                               buildSliderLabel(formatDuration),
                             ],
                           )),
-                          isFullScreenMode
-                              ? buildControlIconButton(
-                                  Icons.rotate_left, rotateScreen)
-                              : emptyWidget(),
-                          isFullScreenMode
-                              ? buildControlIconButton(Icons.tv, enterDlna, 20)
-                              : emptyWidget(),
                           buildControlIconButton(
                               isFullScreenMode
                                   ? Icons.fullscreen_exit
@@ -296,7 +324,10 @@ class _Video extends State<Video> {
 
   void rotateScreen() {
     startTimer();
-    defaultFullScreenOrientation = defaultFullScreenOrientation == DeviceOrientation.landscapeLeft ? DeviceOrientation.landscapeRight : DeviceOrientation.landscapeLeft;
+    defaultFullScreenOrientation =
+        defaultFullScreenOrientation == DeviceOrientation.landscapeLeft
+            ? DeviceOrientation.landscapeRight
+            : DeviceOrientation.landscapeLeft;
     SystemChrome.setPreferredOrientations([defaultFullScreenOrientation]);
   }
 
@@ -323,12 +354,21 @@ class _Video extends State<Video> {
 
   void exitFullScreen() {
     // 退出全屏
-    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom, SystemUiOverlay.top]);
+    SystemChrome.setEnabledSystemUIOverlays(
+        [SystemUiOverlay.bottom, SystemUiOverlay.top]);
     // 返回竖屏
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     setState(() {
       isFullScreenMode = false;
     });
+  }
+
+  void backTouched() {
+    if (isFullScreenMode) {
+      switchFullMode();
+      return;
+    }
+    Navigator.of(context).pop();
   }
 
   void switchFullMode() {
@@ -387,8 +427,10 @@ class _Video extends State<Video> {
     }
     setState(() {
       if (videoPlayerController != null) {
-        duration = videoPlayerController.value.duration.inSeconds.toDouble();
-        position = videoPlayerController.value.position.inSeconds.toDouble();
+        if (videoPlayerController.value != null) {
+          duration = videoPlayerController.value.duration.inSeconds.toDouble();
+          position = videoPlayerController.value.position.inSeconds.toDouble();
+        }
         isPlaying = videoPlayerController.value.isPlaying;
         aspectRatio = videoPlayerController.value.aspectRatio;
         isBuffering = videoPlayerController.value.isBuffering;
