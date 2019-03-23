@@ -269,11 +269,10 @@ class _Video extends State<Video> {
                               buildSliderLabel(formatDuration),
                             ],
                           )),
-                          buildControlIconButton(
-                              isFullScreenMode
-                                  ? Icons.fullscreen_exit
-                                  : Icons.fullscreen,
-                              switchFullMode)
+                          !isFullScreenMode
+                              ? buildControlIconButton(
+                                  Icons.fullscreen, switchFullMode)
+                              : emptyWidget()
                         ],
                       ),
                     ),
