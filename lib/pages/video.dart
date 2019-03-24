@@ -97,7 +97,7 @@ class _VideoPageState extends State<VideoPage> {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          Video(url: playerUrl),
+          DDVideo(url: playerUrl),
           Expanded(
             child: ListView(
               children: buildContent(),
