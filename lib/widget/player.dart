@@ -1,11 +1,13 @@
 import 'dart:async';
-
-import 'package:dd_app/pages/dlna.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dlan/flutter_dlan.dart';
+import 'package:toasty/toasty.dart';
 import 'package:video_player/video_player.dart';
-
+enum _PopupType {
+  none, dlna, other
+}
 class DDVideo extends StatefulWidget {
   String url;
 
@@ -96,12 +98,15 @@ class _VideoView extends State<VideoView> with TickerProviderStateMixin {
   AnimationController _slideBottomAnimationController;
   Animation<double> _slideBottomAnimation;
 
+  List<dynamic> _devices = [];
+  _PopupType _popupType = _PopupType.none;
   Widget build(BuildContext context) {
     if (_videoPlayerController?.value != null) {
       if (_videoPlayerController.value.initialized) {
         return _buildVideo();
       }
-      if (_videoPlayerController.value.hasError && !_videoPlayerController.value.isPlaying) {
+      if (_videoPlayerController.value.hasError &&
+          !_videoPlayerController.value.isPlaying) {
         return _buildMask(errMsg: "加载失败,请稍后再试!");
       }
       return _buildMask(isLoading: true);
@@ -172,6 +177,7 @@ class _VideoView extends State<VideoView> with TickerProviderStateMixin {
         ..addListener(listener)
         ..setVolume(1.0);
     }
+    _initDlna();
   }
 
   void listener() {
@@ -209,6 +215,63 @@ class _VideoView extends State<VideoView> with TickerProviderStateMixin {
     }
   }
 
+  Widget _buildDlna() {
+    if (_devices.length == 0) {
+      return Container(
+        padding: EdgeInsets.all(20.0),
+        child: Center(
+          child: Text("暂无可用设备,请确保两者在同一wifi下.", style: TextStyle(
+            color: Colors.white,
+          ),),
+        ),
+      );
+    }
+    return ListView(
+        children: []..addAll(
+            _devices.map<Widget>((item) {
+              return ListTile(
+                title: Text(
+                  item["name"],
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14.0,
+                  ),
+                ),
+                subtitle: Text(
+                  item["ip"],
+                  style: TextStyle(
+                    color: Colors.black38,
+                    fontSize: 10.0,
+                  ),
+                ),
+                onTap: () async {
+                  Toasty.success("已发送到投屏设备");
+                  _hidePopup();
+                  await FlutterDlan.playUrl(
+                      item["uuid"], _videoPlayerController.dataSource);
+                },
+              );
+            }),
+          ));
+  }
+
+  void _initDlna() async {
+    FlutterDlan.init((List<dynamic> data) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _devices = data;
+      });
+    });
+    FlutterDlan.search();
+    List<dynamic> data = await FlutterDlan.devices;
+    setState(() {
+      _devices = data;
+    });
+//    print(devices);
+  }
+
   Widget _buildMask({String errMsg = "", bool isLoading = false}) {
     Widget child = _emptyWidget();
     if (isLoading) {
@@ -217,7 +280,10 @@ class _VideoView extends State<VideoView> with TickerProviderStateMixin {
       );
     } else if (errMsg != "") {
       child = Center(
-        child: Text(errMsg),
+        child: Text(
+          errMsg,
+          style: TextStyle(color: Colors.white),
+        ),
       );
     }
     return Container(
@@ -347,6 +413,7 @@ class _VideoView extends State<VideoView> with TickerProviderStateMixin {
             PlayerPopupAnimated(
               animation: _animation,
               width: _popupWidth,
+              child: _popupType == _PopupType.dlna ? _buildDlna() : _emptyWidget(),
             ),
           ],
         ),
@@ -398,15 +465,16 @@ class _VideoView extends State<VideoView> with TickerProviderStateMixin {
           _buildControlIconButton(Icons.arrow_back, _backTouched),
           Row(
             children: <Widget>[
-              _isFullScreenMode
-                  ? _buildControlIconButton(Icons.speaker_notes, _switchPopup)
-                  : _emptyWidget(),
+//              _isFullScreenMode
+//                  ? _buildControlIconButton(Icons.speaker_notes, _switchPopup)
+//                  : _emptyWidget(),
               _isFullScreenMode
                   ? _buildControlIconButton(Icons.rotate_left, _rotateScreen)
                   : _emptyWidget(),
-              _isFullScreenMode
-                  ? _buildControlIconButton(Icons.tv, _enterDlna, 20)
-                  : _emptyWidget(),
+              _buildControlIconButton(Icons.tv, _enterDlna, 20)
+//              _isFullScreenMode
+//                  ? _buildControlIconButton(Icons.tv, _enterDlna, 20)
+//                  : _emptyWidget(),
             ],
           ),
         ],
@@ -484,19 +552,17 @@ class _VideoView extends State<VideoView> with TickerProviderStateMixin {
   }
 
   void _enterDlna() async {
-    if (_videoPlayerController != null) {
-      _videoPlayerController.pause();
-    }
-    await Navigator.of(context).push(
-      new CupertinoPageRoute(
-        builder: (context) => new DlnaPage(url: "xxxx"),
-      ),
-    );
-    _videoPlayerController.play();
+    setState(() {
+      _popupType = _PopupType.dlna;
+    });
+    _switchPopup();
   }
 
   void _enterFullScreen() async {
-    Navigator.of(context).push(PageRouteBuilder(
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    // 设置横屏
+    SystemChrome.setPreferredOrientations([_defaultFullScreenOrientation]);
+    await Navigator.of(context).push(PageRouteBuilder(
       settings: RouteSettings(isInitialRoute: false),
       pageBuilder: (
         BuildContext context,
@@ -516,12 +582,8 @@ class _VideoView extends State<VideoView> with TickerProviderStateMixin {
         );
       },
     ));
-//    setState(() {
-//      _isFullScreenMode = true;
-//    });
-    SystemChrome.setEnabledSystemUIOverlays([]);
-    // 设置横屏
-    SystemChrome.setPreferredOrientations([_defaultFullScreenOrientation]);
+    _initDlna();
+
   }
 
   void _exitFullScreen() {
@@ -625,32 +687,13 @@ class _VideoView extends State<VideoView> with TickerProviderStateMixin {
   }
 
   void _seekTo(double seconds) {
-//    hidePopup();
+    _hidePopup();
     if (_videoPlayerController != null) {
       _startTimer();
       _videoPlayerController.seekTo(Duration(seconds: seconds.toInt()));
       _videoPlayerController.play();
     }
   }
-
-//  void _videoListener() {
-//    if (!mounted) {
-//      return;
-//    }
-//    setState(() {
-//      if (_videoPlayerController != null) {
-//        if (_videoPlayerController.value != null) {
-//          if (_videoPlayerController.value.duration != null) {
-//            _duration = _videoPlayerController.value.duration.inSeconds.toDouble();
-//            _position = _videoPlayerController.value.position.inSeconds.toDouble();
-//          }
-//        }
-//        isPlaying = _videoPlayerController.value.isPlaying;
-//        _aspectRatio = _videoPlayerController.value.aspectRatio;
-//        _isBuffering = _videoPlayerController.value.isBuffering;
-//      }
-//    });
-//  }
 
   String _formatTime(double sec) {
     Duration d = Duration(seconds: sec.toInt());
@@ -678,9 +721,13 @@ class _VideoView extends State<VideoView> with TickerProviderStateMixin {
 
 class PlayerPopupAnimated extends AnimatedWidget {
   double width = 0.0;
+  Widget child;
 
   PlayerPopupAnimated(
-      {Key key, @required Animation<double> animation, @required this.width})
+      {Key key,
+      @required Animation<double> animation,
+      @required this.width,
+      @required this.child})
       : super(key: key, listenable: animation);
 
   Widget build(BuildContext context) {
@@ -692,6 +739,7 @@ class PlayerPopupAnimated extends AnimatedWidget {
       width: width,
       child: Container(
         color: Colors.teal,
+        child: child,
       ),
     );
   }

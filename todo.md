@@ -147,5 +147,3 @@ flutter clean && flutter build apk --release --target-platform=android-arm64
 http://www.hpplay.com.cn/LBDeveloper/uploadFiles/file/IOSSDK.zip
 http://www.hpplay.com.cn/LBDeveloper/uploadFiles/file/ANDROID.zip
 
-
-### popup展开时,不自动隐藏控制条

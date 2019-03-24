@@ -1,54 +1,16 @@
 import 'dart:io';
-import 'package:dd_app/pages/dlna.dart';
 import 'package:dd_app/pages/feedback.dart';
 import 'package:dd_app/widget/player.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:dd_app/utils/dio.dart';
-import 'package:dd_app/utils/util.dart';
 
-// import 'package:video_player_page/video_player_page.dart';
-// import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:dd_app/widget/photo-hero.dart';
 import 'package:dd_app/utils/db/record.dart';
 import 'package:loading/loading.dart';
 import 'package:dd_app/utils/modal.dart';
 import 'package:toasty/toasty.dart';
-import 'package:dd_app/widget/cached-image.dart';
 import 'package:dd_app/widget/ad-item.dart';
-import 'package:dd_app/widget/empty-widget.dart';
-
-// import 'package:dd_app/widget/number.dart';
 import 'package:share/share.dart';
-import 'dart:ui' as ui;
-
-class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate(this._tabBar);
-
-  final TabBar _tabBar;
-
-  @override
-  double get minExtent => _tabBar.preferredSize.height;
-
-  @override
-  double get maxExtent => _tabBar.preferredSize.height;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: Colors.white,
-      child: _tabBar,
-    );
-  }
-
-  @override
-  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return false;
-  }
-}
 
 class VideoPage extends StatefulWidget {
   final Map item;
@@ -135,9 +97,7 @@ class _VideoPageState extends State<VideoPage> {
       ));
       return w;
     }
-    w.add(Center(
-      child: Text(item["name"]),
-    ));
+
     pickedPlayItems.forEach((key, val) {
       String type = val[0]["type"];
       String name = "外部播放";
@@ -164,7 +124,7 @@ class _VideoPageState extends State<VideoPage> {
               Text(
                 name,
                 style: TextStyle(
-                  fontSize: 17.0,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -185,6 +145,53 @@ class _VideoPageState extends State<VideoPage> {
         ),
       );
     });
+    w.add(Container(
+      padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            item["name"],
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            item["region"] +
+                " / " +
+                item["released_at"] +
+                " / " +
+                item["classify"]["name"] +
+                " / " +
+                item["number"].toString() +
+                "次播放",
+            style: TextStyle(
+              fontSize: 12.0,
+            ),
+          ),
+          Text(
+            "导演: " + item["director"].join(","),
+            style: TextStyle(
+              fontSize: 12.0,
+            ),
+          ),
+          Text(
+            "主演: " + item["starring"].join(","),
+            style: TextStyle(
+              fontSize: 12.0,
+            ),
+          ),
+          Text(
+            "\n简介: " + item["introduce"],
+            style: TextStyle(
+              fontSize: 12.0,
+            ),
+          ),
+        ],
+      ),
+    ));
+
     return w;
   }
 
@@ -239,8 +246,8 @@ class _VideoPageState extends State<VideoPage> {
       pickedPlayItems = _pickItems(payload["remote_url"]);
       autoPlay();
     });
-
   }
+
   void autoPlay() {
     String url = "";
     if (pickedPlayItems["m3u8"] != null) {
@@ -254,6 +261,7 @@ class _VideoPageState extends State<VideoPage> {
       });
     }
   }
+
   // 分组处理
   Map<String, List<Map>> _pickItems(List<dynamic> items) {
     Map<String, List<Map>> tmp = {};
@@ -372,7 +380,7 @@ class _VideoPageState extends State<VideoPage> {
           tag,
           style: TextStyle(
             color: Theme.of(context).primaryColor,
-            fontSize: 16.0,
+            fontSize: 14.0,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -406,7 +414,6 @@ class _VideoPageState extends State<VideoPage> {
       playerUrl = url;
     });
   }
-
 
   void _handleSelectFavorite() async {
     // 如果正在加载或加载失败不做处理
