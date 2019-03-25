@@ -8,6 +8,7 @@
       <root url="file://$PROJECT_DIR$/../plugins/flutter_toasty/lib" />
       <root url="file://$PROJECT_DIR$/../plugins/flutter_tx_xg/lib" />
       <root url="file://$PROJECT_DIR$/../plugins/flutter_webview/lib" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/git/video_player_flutter-7af99182f428e0237ce5705ec6d7e74383ae4f96/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.0.8/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-1.0.4/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/cached_network_image-0.4.2/lib" />
@@ -50,7 +51,6 @@
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-3.0.3/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/uuid-1.0.3/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.0.8/lib" />
-      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/video_player-0.10.0+2/lib" />
       <root url="file://$USER_HOME$/flutter/bin/cache/pkg/sky_engine/lib" />
       <root url="file://$USER_HOME$/flutter/packages/flutter/lib" />
       <root url="file://$USER_HOME$/flutter/packages/flutter_test/lib" />

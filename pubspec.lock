@@ -355,10 +355,12 @@ packages:
   video_player:
     dependency: transitive
     description:
-      name: video_player
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.10.0+2"
+      path: "."
+      ref: HEAD
+      resolved-ref: "7af99182f428e0237ce5705ec6d7e74383ae4f96"
+      url: "git://github.com/shmy/video_player_flutter.git"
+    source: git
+    version: "0.10.0+4"
   webview:
     dependency: "direct main"
     description:

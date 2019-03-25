@@ -14,8 +14,8 @@
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/package_info-0.3.2+1" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity-0.3.2" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.4.3" />
-      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/video_player-0.10.0+2" />
       <root url="file://$PROJECT_DIR$/../plugins/dd_player" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/git/video_player_flutter-7af99182f428e0237ce5705ec6d7e74383ae4f96" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
