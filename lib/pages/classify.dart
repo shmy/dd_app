@@ -1,8 +1,7 @@
+import 'package:dd_app/pages/live.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:dd_app/pages/classify-list.dart';
-import 'package:video_player/video_player.dart';
-
 import 'package:dd_app/mixins/pageState.dart';
 
 class ClassifyPage extends StatefulWidget {
@@ -314,14 +313,17 @@ class ClassifyPageState extends State<ClassifyPage> implements PageState {
   }
 
   void _handleRightMenuTap(Map item) async {
-//    if (item["url"] != null) {
-//      await VideoPlayer.play(
-//        item["name"] + "【黑人视频】",
-//        item["url"],
-//        "",
-//      );
-//      return;
-//    }
+    if (item["url"] != null) {
+      Navigator.of(context).push(
+        new CupertinoPageRoute(
+          builder: (context) => new LivePage(
+            url: item["url"],
+            name: item["name"],
+          ),
+        ),
+      );
+      return;
+    }
     Navigator.of(context).push(
           new CupertinoPageRoute(
             builder: (context) => new ClassifyListPage(
