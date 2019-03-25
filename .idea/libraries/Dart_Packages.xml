@@ -2,8 +2,8 @@
   <library name="Dart Packages">
     <CLASSES>
       <root url="file://$PROJECT_DIR$/../plugins/android_intent/lib" />
+      <root url="file://$PROJECT_DIR$/../plugins/dd_player/lib" />
       <root url="file://$PROJECT_DIR$/../plugins/flutter_clipboard/lib" />
-      <root url="file://$PROJECT_DIR$/../plugins/flutter_dlan/lib" />
       <root url="file://$PROJECT_DIR$/../plugins/flutter_loading/lib" />
       <root url="file://$PROJECT_DIR$/../plugins/flutter_toasty/lib" />
       <root url="file://$PROJECT_DIR$/../plugins/flutter_tx_xg/lib" />

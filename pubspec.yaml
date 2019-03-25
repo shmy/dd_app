@@ -20,14 +20,16 @@ dependencies:
   connectivity: ^0.3.1
   timeago: ^2.0.3
   sqflite: any
-  video_player: "^0.10.0"
+#  video_player: "^0.10.0"
 #  flutter_statusbar_manager : any
   # dropdown_menu: ^1.1.0
   event_bus: ^1.0.1
 #  video_player:
 #    path: ../plugins/flutter_video_player
-  flutter_dlan:
-    path: ../plugins/flutter_dlan
+#  flutter_dlan:
+#    path: ../plugins/flutter_dlan
+  dd_player:
+    path: ../plugins/dd_player
   toasty:
     path: ../plugins/flutter_toasty
   clipboard:

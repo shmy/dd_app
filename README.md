@@ -6,6 +6,7 @@
 
 ### 2019-03-24 v0.2.1
 - 优化视频内联播放
+- 独立播放器package
 
 ### 2019-03-20 v0.1.9
 - 支持视频内联播放,减少体积
@@ -42,4 +43,5 @@
 * webview: [https://github.com/shmy/flutter_webview](https://github.com/shmy/flutter_webview)
 * android_intent: [https://github.com/shmy/android_intent](https://github.com/shmy/android_intent) [ios 使用了 URL Schemes ]
 * tx_xg: [https://github.com/shmy/flutter_tx_xg](https://github.com/shmy/flutter_tx_xg) [只实现了android]
-* flutter_dlan: [https://github.com/shmy/flutter_dlan) [只实现了android]
+* flutter_ddplayer: [https://github.com/shmy/flutter_ddplayer) [只实现了android dlna]
+* ~~flutter_dlan: [https://github.com/shmy/flutter_dlan) [只实现了android]~~

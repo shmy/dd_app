@@ -5,7 +5,7 @@ import 'package:dd_app/app.dart';
 import 'package:dd_app/events/event_bus.dart';
 import 'package:dd_app/events/theme.dart';
 import 'package:dd_app/utils/db/setting.dart';
-import 'package:flutter_dlan/flutter_dlan.dart';
+import 'package:dd_player/dlna.dart';
 
 // 主题索引
 final int themeIndex = 0;
@@ -93,10 +93,10 @@ class LifecycleEventHandler extends WidgetsBindingObserver {
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
       case AppLifecycleState.suspending:
-        await FlutterDlan.stop();
+        await DdPlayerDlna.stop();
         break;
       case AppLifecycleState.resumed:
-        await FlutterDlan.search();
+        await DdPlayerDlna.search();
         break;
     }
   }

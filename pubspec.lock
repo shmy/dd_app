@@ -85,6 +85,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2"
+  dd_player:
+    dependency: "direct main"
+    description:
+      path: "../plugins/dd_player"
+      relative: true
+    source: path
+    version: "0.0.1"
   dio:
     dependency: "direct main"
     description:
@@ -111,13 +118,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2"
-  flutter_dlan:
-    dependency: "direct main"
-    description:
-      path: "../plugins/flutter_dlan"
-      relative: true
-    source: path
-    version: "0.0.1"
   flutter_page_indicator:
     dependency: transitive
     description:
@@ -353,7 +353,7 @@ packages:
     source: hosted
     version: "2.0.8"
   video_player:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: video_player
       url: "https://pub.dartlang.org"

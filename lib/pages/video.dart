@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dd_app/pages/feedback.dart';
-import 'package:dd_app/widget/player.dart';
+import 'package:dd_player/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dd_app/utils/dio.dart';
@@ -59,7 +59,7 @@ class _VideoPageState extends State<VideoPage> {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          DDVideo(url: playerUrl),
+          DdPlayer(url: playerUrl),
           Expanded(
             child: ListView(
               children: buildContent(),
