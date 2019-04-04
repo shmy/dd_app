@@ -31,7 +31,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
-        versionName "0.2.2"
+        versionName "0.2.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [
             XG_ACCESS_ID: "2100306830",
