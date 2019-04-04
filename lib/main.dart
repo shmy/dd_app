@@ -1,11 +1,11 @@
 import 'dart:async';
 // import 'package:dd_app/utils/db/future.dart';
+import 'package:dd_player/dlna.dart';
 import 'package:flutter/material.dart';
 import 'package:dd_app/app.dart';
 import 'package:dd_app/events/event_bus.dart';
 import 'package:dd_app/events/theme.dart';
 import 'package:dd_app/utils/db/setting.dart';
-import 'package:dd_player/dlna.dart';
 
 // 主题索引
 final int themeIndex = 0;
@@ -24,6 +24,8 @@ void main() async {
   // 修改表结构
   // TODO 想个更好的升级策略
   // await FutureUpdateDB.future();
+  await DdPlayerDlna.stop();
+  await DdPlayerDlna.search();
   runApp(new App(setting: sets));
 }
 
@@ -49,7 +51,6 @@ class _AppState extends State<App> {
   ThemeConf theme;
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(LifecycleEventHandler());
     // TODO: implement initState
     super.initState();
     // 应用主题
@@ -82,23 +83,23 @@ class _AppState extends State<App> {
   }
 }
 
-class LifecycleEventHandler extends WidgetsBindingObserver {
-
-  LifecycleEventHandler();
-
-  @override
-  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    print('-------' + state.toString() + '-------');
-    switch (state) {
-      case AppLifecycleState.inactive:
-      case AppLifecycleState.paused:
-      case AppLifecycleState.suspending:
-        await DdPlayerDlna.stop();
-        break;
-      case AppLifecycleState.resumed:
-        await DdPlayerDlna.search();
-        break;
-    }
-  }
-}
+//class LifecycleEventHandler extends WidgetsBindingObserver {
+//
+//  LifecycleEventHandler();
+//
+//  @override
+//  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+//    print('-------' + state.toString() + '-------');
+//    switch (state) {
+//      case AppLifecycleState.inactive:
+//      case AppLifecycleState.paused:
+//      case AppLifecycleState.suspending:
+//        await DdPlayerDlna.stop();
+//        break;
+//      case AppLifecycleState.resumed:
+//        await DdPlayerDlna.search();
+//        break;
+//    }
+//  }
+//}
 

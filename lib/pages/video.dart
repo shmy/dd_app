@@ -57,15 +57,24 @@ class _VideoPageState extends State<VideoPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          DdPlayer(url: playerUrl),
-          Expanded(
-            child: ListView(
-              children: buildContent(),
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: MediaQuery.of(context).size.height / 3,
+              child: DdPlayer(url: playerUrl),
             ),
-          ),
-        ],
+            Expanded(
+              child: Container(
+                color: Colors.white,
+                child: ListView(
+                  children: buildContent(),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
