@@ -63,7 +63,11 @@ class _VideoPageState extends State<VideoPage> {
           children: <Widget>[
             Container(
               height: MediaQuery.of(context).size.height / 3,
-              child: DdPlayer(url: playerUrl),
+              child: DdPlayer(
+                url: playerUrl,
+                enableDLNA: true,
+                enablePip: true,
+              ),
             ),
             Expanded(
               child: Container(
